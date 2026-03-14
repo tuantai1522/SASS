@@ -7,12 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup Label="Integration">
+        <PackageReference Include="Asp.Versioning.Mvc" Version="10.0.0-preview.2" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0-preview.2" />
         <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+        <PackageReference Include="Scrutor" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\SASS.Constants\SASS.Constants.csproj" />
       <ProjectReference Include="..\SASS.SharedKernel\SASS.SharedKernel.csproj" />
     </ItemGroup>
 
