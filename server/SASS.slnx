@@ -1,0 +1,10 @@
+﻿<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src\BuildingBlocks\SASS.Chassis\SASS.Chassis.csproj" Type="Classic C#" />
+    <Project Path="src\BuildingBlocks\SASS.SharedKernel\SASS.SharedKernel.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/src/Services/">
+    <Project Path="src\Services\SASS.Chat\SASS.Chat.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>
