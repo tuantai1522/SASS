@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup Label="Integration">
+        <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SASS.SharedKernel\SASS.SharedKernel.csproj" />
+    </ItemGroup>
+
 </Project>
