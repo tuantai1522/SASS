@@ -16,6 +16,13 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
         <PackageReference Include="Scrutor" Version="7.0.0" />
     </ItemGroup>
+    
+    <ItemGroup Label="AI">
+        <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.74.0-preview" />
+        <PackageReference Include="OpenAI" Version="2.9.1" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.4.1" />
+    </ItemGroup>
+    
     <ItemGroup>
       <ProjectReference Include="..\..\SASS.Constants\SASS.Constants.csproj" />
       <ProjectReference Include="..\SASS.SharedKernel\SASS.SharedKernel.csproj" />
