@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SASS.Chat.Domain.AggregatesModel.Users;
 
 namespace SASS.Chat.Infrastructure.EntityConfigurations;
 
