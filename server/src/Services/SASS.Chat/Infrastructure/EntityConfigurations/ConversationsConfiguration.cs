@@ -27,6 +27,7 @@ public sealed class ConversationsConfiguration : IEntityTypeConfiguration<Conver
         builder.Property(x => x.UserId)
             .IsRequired();
 
+        // Index for pagination
         builder
             .HasIndex(x => new { x.UserId, x.CreatedAt, x.Id })
             .HasDatabaseName("ix_conversations_user_id_created_at_id");
