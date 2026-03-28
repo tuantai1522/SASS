@@ -19,26 +19,10 @@ internal static class Extensions
             );
         }
 
-        public void AddGoogleAuthentication(IConfiguration configuration)
+        public void AddGoogleAuthentication()
         {
             var services = builder.Services;
             services.AddHttpClient("GoogleAuth");
-
-            services.AddOptions<GoogleAuthOptions>()
-                .Bind(configuration.GetSection("GoogleAuth"))
-                .Validate(o =>
-                        new[]
-                        {
-                            o.ClientId,
-                            o.ClientSecret,
-                            o.RedirectUri,
-                            o.Scope,
-                            o.GoogleUrl,
-                            o.GoogleAuthTokenEndpoint,
-                            o.GoogleContactInfoEndpoint
-                        }.All(v => !string.IsNullOrWhiteSpace(v)), 
-                    "GoogleAuthOptions is invalid")
-                .ValidateOnStart();
         }
     }
 }

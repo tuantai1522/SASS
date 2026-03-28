@@ -6,6 +6,7 @@ global using SASS.Chassis.Exceptions;
 global using SASS.Chassis.Security;
 global using SASS.SharedKernel.SeedWork;
 global using SASS.SharedKernel.Helpers;
+global using SASS.SharedKernel.Results;
 global using SASS.Constants.Core;
 global using SASS.Constants.Infrastructure;
 global using SASS.Chat.Domain.AggregatesModel.Conversations;

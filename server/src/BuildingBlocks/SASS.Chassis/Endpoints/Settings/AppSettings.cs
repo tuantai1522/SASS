@@ -15,6 +15,7 @@ public class AppSettings
     public virtual string JwtSecuritySchemeName => "Bearer";
     public virtual string JwtSecurityDescription => "Input JWT token as: Bearer {your token}";
     public virtual string? DefaultJwtToken => null;
+    public virtual bool PersistAuthentication => true;
     public virtual IReadOnlyList<string> DocumentNames => ["v1"];
 }
 

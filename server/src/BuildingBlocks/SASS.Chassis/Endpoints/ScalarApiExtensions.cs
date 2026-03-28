@@ -117,6 +117,11 @@ public static class ScalarApiExtensions
                 x => x.WithToken(appSettings.DefaultJwtToken ?? string.Empty)
             );
             options.AddPreferredSecuritySchemes([appSettings.JwtSecuritySchemeName]);
+
+            if (appSettings.PersistAuthentication)
+            {
+                options.EnablePersistentAuthentication();
+            }
         }
 
         configure?.Invoke(options);

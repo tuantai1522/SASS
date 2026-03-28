@@ -2,8 +2,6 @@ using SASS.Chat.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddApiDocumentationServices();
-
 builder.AddApplicationServices();
 
 var app = builder.Build();
@@ -11,6 +9,9 @@ var app = builder.Build();
 app.UseExceptionHandler();
 
 app.UseApiDocumentation();
+app.UseAuthentication();
+app.UseAuthorization();
+
 var apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(ApiVersions.V1)
     .ReportApiVersions()

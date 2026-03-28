@@ -7,14 +7,13 @@ namespace SASS.Chat.Extensions;
 
 public static class Extensions
 {
-    public static IHostApplicationBuilder AddApiDocumentationServices(this IHostApplicationBuilder builder)
+    public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddScalarApiDocumentation<ChatAppSettings>();
-        return builder;
-    }
+        // Add all options of system
+        builder.AddOptions(builder.Configuration);
 
-    public static IHostApplicationBuilder AddApplicationServices(this IHostApplicationBuilder builder)
-    {
+        builder.AddDefaultApiDocumentation();
+
         builder.Services.AddVersioning();
         builder.Services.AddEndpoints(typeof(IChatApiMarker));
         
@@ -42,9 +41,7 @@ public static class Extensions
         builder.Services.AddValidatorsFromAssemblyContaining<IChatApiMarker>(includeInternalTypes: true);
         
         // Add google authentication
-        builder.AddGoogleAuthentication(builder.Configuration);
-        
-        return builder;
+        builder.AddGoogleAuthentication();
     }
 
     public static WebApplication UseApiDocumentation(this WebApplication app)
@@ -53,4 +50,34 @@ public static class Extensions
 
         return app;
     }
+
+    private static void AddOptions(this IHostApplicationBuilder builder, IConfiguration configuration)
+    {
+        builder.Services.AddOptions<SystemOptions>()
+            .Bind(builder.Configuration.GetSection("SystemOptions"))
+            .Validate(x => !string.IsNullOrWhiteSpace(x.DefaultConversationName), "Can't validate SystemOptions")
+            .ValidateOnStart();
+        
+        builder.Services.AddOptions<GoogleAuthOptions>()
+            .Bind(configuration.GetSection("GoogleAuth"))
+            .Validate(o =>
+                    new[]
+                    {
+                        o.ClientId,
+                        o.ClientSecret,
+                        o.RedirectUri,
+                        o.Scope,
+                        o.GoogleUrl,
+                        o.GoogleAuthTokenEndpoint,
+                        o.GoogleContactInfoEndpoint
+                    }.All(v => !string.IsNullOrWhiteSpace(v)), 
+                "GoogleAuthOptions is invalid")
+            .ValidateOnStart();
+    }
+
+    private static void AddDefaultApiDocumentation(this IHostApplicationBuilder builder)
+    {
+        builder.Services.AddScalarApiDocumentation<ChatAppSettings>();
+    }
+    
 }

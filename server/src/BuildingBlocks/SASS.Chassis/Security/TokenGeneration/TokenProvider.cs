@@ -22,7 +22,7 @@ internal sealed class TokenProvider(IConfiguration configuration) : ITokenProvid
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
             ]),
-            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("JwtOptions:ExpirationInMinutes")),
+            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("JwtOptions:ExpiredAccessToken")),
             SigningCredentials = credentials,
             Issuer = configuration["JwtOptions:Issuer"],
             Audience = configuration["JwtOptions:Audience"]
