@@ -15,9 +15,11 @@ public sealed class UsersConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Email)
             .IsRequired()
             .HasMaxLength(512);
+        
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
 
         builder.Property(x => x.AvatarUrl)
-            .IsRequired()
             .HasMaxLength(512);
 
         builder

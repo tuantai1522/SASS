@@ -1,4 +1,3 @@
-using SASS.Chat.Domain.AggregatesModel.Conversations;
 using SASS.Chat.Domain.Exceptions;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 
@@ -14,10 +13,9 @@ public sealed class User : Entity, IAggregateRoot
     {
     }
 
-    public static User Create(string email, string avatarUrl)
+    public static User Create(string email, string? avatarUrl)
     {
         EnsureRequiredText(email, nameof(email), 512);
-        EnsureRequiredText(avatarUrl, nameof(avatarUrl), 512);
 
         return new User
         {
@@ -27,7 +25,7 @@ public sealed class User : Entity, IAggregateRoot
     }
 
     public string Email { get; private set; } = null!;
-    public string AvatarUrl { get; private set; } = null!;
+    public string? AvatarUrl { get; private set; }
 
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
     public IReadOnlyCollection<File> Files => _files;
