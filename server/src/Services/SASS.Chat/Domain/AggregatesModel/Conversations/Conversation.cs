@@ -34,6 +34,12 @@ public sealed class Conversation : Entity, IAggregateRoot
     public IReadOnlyCollection<ConversationFile> ConversationFiles => _conversationFiles;
     public IReadOnlyCollection<Message> Messages => _messages;
 
+    public void Rename(string name)
+    {
+        EnsureRequiredText(name, nameof(name), 512);
+        Name = name;
+    }
+
     public void UpdateLastMessageTimestamp(long timestamp)
     {
         EnsureUnixMilliseconds(timestamp, nameof(timestamp));
