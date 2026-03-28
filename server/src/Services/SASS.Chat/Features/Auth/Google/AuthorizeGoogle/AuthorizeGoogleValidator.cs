@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace SASS.Chat.Features.Auth.Google.AuthorizeGoogle;
 
-internal sealed class AuthorizeGoogleValidator : AbstractValidator<AuthorizeGoogleQuery>
+internal sealed class AuthorizeGoogleValidator : AbstractValidator<AuthorizeGoogleCommand>
 {
     public AuthorizeGoogleValidator()
     {

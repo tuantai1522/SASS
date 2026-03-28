@@ -20,4 +20,7 @@ app.MapEndpoints(apiVersionSet);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication(); 
+app.UseAuthorization();
+
 app.Run();

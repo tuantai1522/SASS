@@ -27,13 +27,16 @@ internal static class Extensions
             services.AddOptions<GoogleAuthOptions>()
                 .Bind(configuration.GetSection("GoogleAuth"))
                 .Validate(o =>
-                        !string.IsNullOrWhiteSpace(o.ClientId) &&
-                        !string.IsNullOrWhiteSpace(o.ClientSecret) &&
-                        !string.IsNullOrWhiteSpace(o.RedirectUri) &&
-                        !string.IsNullOrWhiteSpace(o.Scope) &&
-                        !string.IsNullOrWhiteSpace(o.GoogleUrl) &&
-                        !string.IsNullOrWhiteSpace(o.GoogleAuthTokenEndpoint) &&
-                        !string.IsNullOrWhiteSpace(o.GoogleContactInfoEndpoint),
+                        new[]
+                        {
+                            o.ClientId,
+                            o.ClientSecret,
+                            o.RedirectUri,
+                            o.Scope,
+                            o.GoogleUrl,
+                            o.GoogleAuthTokenEndpoint,
+                            o.GoogleContactInfoEndpoint
+                        }.All(v => !string.IsNullOrWhiteSpace(v)), 
                     "GoogleAuthOptions is invalid")
                 .ValidateOnStart();
         }

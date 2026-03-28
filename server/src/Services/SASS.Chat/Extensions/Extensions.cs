@@ -1,3 +1,5 @@
+using FluentValidation;
+using SASS.Chassis.Security.Extensions;
 using SASS.Chat.Configurations;
 using SASS.Chat.Infrastructure;
 
@@ -16,6 +18,8 @@ public static class Extensions
         builder.Services.AddVersioning();
         builder.Services.AddEndpoints(typeof(IChatApiMarker));
         
+        builder.AddDefaultAuthentication();
+        builder.Services.AddAuthorization();
         
         // Add exception handlers
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
@@ -34,6 +38,9 @@ public static class Extensions
         // Add database configuration
         builder.AddPersistenceServices();
                 
+        // Configure FluentValidation
+        builder.Services.AddValidatorsFromAssemblyContaining<IChatApiMarker>(includeInternalTypes: true);
+        
         // Add google authentication
         builder.AddGoogleAuthentication(builder.Configuration);
         

@@ -21,10 +21,13 @@ public static class ModelExtensions
             services.AddOptions<OpenRouterAIOptions>()
                 .Bind(configuration.GetSection(nameof(OpenRouterAIOptions)))
                 .Validate(o =>
-                        !string.IsNullOrWhiteSpace(o.Url) &&
-                        !string.IsNullOrWhiteSpace(o.ApiKey) &&
-                        !string.IsNullOrWhiteSpace(o.ChatModelId) &&
-                        !string.IsNullOrWhiteSpace(o.EmbeddingModelId),
+                        new[]
+                        {
+                            o.Url,
+                            o.ApiKey,
+                            o.ChatModelId,
+                            o.EmbeddingModelId
+                        }.All(v => !string.IsNullOrWhiteSpace(v)),
                     "OpenRouterAIOptions is invalid")
                 .ValidateOnStart();
 

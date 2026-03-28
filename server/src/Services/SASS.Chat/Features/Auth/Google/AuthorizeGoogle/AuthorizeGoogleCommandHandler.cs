@@ -2,16 +2,18 @@ using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.Extensions.Options;
+using SASS.Chassis.Security.TokenGeneration;
 using SASS.Chat.Configurations;
 
 namespace SASS.Chat.Features.Auth.Google.AuthorizeGoogle;
 
-internal sealed class AuthorizeGoogleQueryHandler(
+internal sealed class AuthorizeGoogleCommandHandler(
     IHttpClientFactory httpClientFactory,
     IOptions<GoogleAuthOptions> options,
-    IUserRepository userRepository) : IRequestHandler<AuthorizeGoogleQuery, AuthorizeGoogleResponse>
+    ITokenProvider tokenProvider,
+    IUserRepository userRepository) : IRequestHandler<AuthorizeGoogleCommand, AuthorizeGoogleResponse>
 {
-    public async Task<AuthorizeGoogleResponse> Handle(AuthorizeGoogleQuery request, CancellationToken cancellationToken)
+    public async Task<AuthorizeGoogleResponse> Handle(AuthorizeGoogleCommand request, CancellationToken cancellationToken)
     {
         var settings = options.Value;
         var httpClient = httpClientFactory.CreateClient("GoogleAuth");
@@ -31,16 +33,15 @@ internal sealed class AuthorizeGoogleQueryHandler(
         var normalizedEmail = googleUser.Email.Trim().ToLowerInvariant();
         var user = await userRepository.GetByEmailAsync(normalizedEmail, cancellationToken);
 
-        var isNewUser = false;
         if (user is null)
         {
             user = User.Create(normalizedEmail, null);
             await userRepository.AddAsync(user, cancellationToken);
             await userRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-            isNewUser = true;
         }
 
-        return new AuthorizeGoogleResponse(user.Id, user.Email, isNewUser);
+        return new AuthorizeGoogleResponse(tokenProvider.Create(user.Id, user.Email));
+
     }
 
     private static async Task<GoogleTokenResponse?> ExchangeCodeForTokenAsync(

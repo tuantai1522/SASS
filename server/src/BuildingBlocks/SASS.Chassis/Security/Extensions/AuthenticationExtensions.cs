@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SASS.Chassis.Security.Settings;
+using SASS.Chassis.Security.TokenGeneration;
+using SASS.Chassis.Security.UserRetrieval;
 
 namespace SASS.Chassis.Security.Extensions;
 
@@ -15,8 +17,20 @@ public static class AuthenticationExtensions
         var services = builder.Services;
         var configuration = builder.Configuration;
 
-        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
-
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration.GetSection(nameof(JwtOptions)))
+            .Validate(o =>
+                    new[]
+                    {
+                        o.AccessTokenKey,
+                        o.Secret,
+                        o.Issuer,
+                        o.Audience
+                    }.All(v => !string.IsNullOrWhiteSpace(v)) && 
+                    o.ExpiredAccessToken > 0,
+                "JwtOptions is invalid")
+            .ValidateOnStart();
+        
         services.AddSingleton(sp =>
         {
             var jwtOptions = sp.GetRequiredService<IOptions<JwtOptions>>().Value;
@@ -39,15 +53,24 @@ public static class AuthenticationExtensions
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer();
-
-        services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-            .Configure<TokenValidationParameters>((options, tokenValidationParameters) =>
+            .AddJwtBearer(opt =>
             {
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = tokenValidationParameters;
+                opt.RequireHttpsMetadata = false;
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtOptions:AccessTokenKey"]!)),
+                    ValidIssuer = configuration["JwtOptions:Issuer"],
+                    ValidAudience = configuration["JwtOptions:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
+        services.AddHttpContextAccessor();
+        
+        services
+            .AddScoped<IUserProvider, UserProvider>()
+            .AddScoped<ITokenProvider, TokenProvider>();
+        
         return builder;
     }
 }

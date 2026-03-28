@@ -21,7 +21,7 @@ public sealed class AuthorizeGoogleEndpoint : IEndpoint<Ok<AuthorizeGoogleRespon
 
     public async Task<Ok<AuthorizeGoogleResponse>> HandleAsync(ISender sender, [FromQuery] string code, CancellationToken cancellationToken = default)
     {
-        var query = new AuthorizeGoogleQuery(code);
+        var query = new AuthorizeGoogleCommand(code);
         var result = await sender.Send(query, cancellationToken);
 
         return TypedResults.Ok(result);

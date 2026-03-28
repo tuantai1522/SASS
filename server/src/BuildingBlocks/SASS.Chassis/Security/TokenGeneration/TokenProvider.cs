@@ -6,33 +6,32 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace SASS.Chassis.Security.TokenGeneration;
 
-internal sealed class TokenProvider(IConfiguration configuration)
+internal sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    // public string Create(User user)
-    // {
-    //     string secretKey = configuration["Jwt:Secret"]!;
-    //     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-    //
-    //     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-    //
-    //     var tokenDescriptor = new SecurityTokenDescriptor
-    //     {
-    //         Subject = new ClaimsIdentity(
-    //         [
-    //             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-    //             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-    //             new Claim("email_verified", user.EmailVerified.ToString())
-    //         ]),
-    //         Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
-    //         SigningCredentials = credentials,
-    //         Issuer = configuration["Jwt:Issuer"],
-    //         Audience = configuration["Jwt:Audience"]
-    //     };
-    //
-    //     var handler = new JsonWebTokenHandler();
-    //
-    //     string token = handler.CreateToken(tokenDescriptor);
-    //
-    //     return token;
-    // }
+    public string Create(Guid userId, string email)
+    {
+        string secretKey = configuration["JwtOptions:Secret"]!;
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(
+            [
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+            ]),
+            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("JwtOptions:ExpirationInMinutes")),
+            SigningCredentials = credentials,
+            Issuer = configuration["JwtOptions:Issuer"],
+            Audience = configuration["JwtOptions:Audience"]
+        };
+        
+        var handler = new JsonWebTokenHandler();
+        
+        string token = handler.CreateToken(tokenDescriptor);
+        
+        return token;
+    }
 }
