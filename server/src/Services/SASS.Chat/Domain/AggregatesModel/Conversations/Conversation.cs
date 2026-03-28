@@ -1,4 +1,3 @@
-using SASS.Chat.Domain.AggregatesModel.Users;
 using SASS.Chat.Domain.Exceptions;
 
 namespace SASS.Chat.Domain.AggregatesModel.Conversations;
@@ -12,29 +11,21 @@ public sealed class Conversation : Entity, IAggregateRoot
     {
     }
 
-    public static Conversation Create(Guid userId, string name, long createdAt, long lastMessageUpdatedAt)
+    public static Conversation Create(Guid userId, string name)
     {
         EnsureIdentity(userId, nameof(userId));
         EnsureRequiredText(name, nameof(name), 512);
-        EnsureUnixMilliseconds(createdAt, nameof(createdAt));
-        EnsureUnixMilliseconds(lastMessageUpdatedAt, nameof(lastMessageUpdatedAt));
-
-        if (lastMessageUpdatedAt < createdAt)
-        {
-            throw new ChatDomainException("lastMessageUpdatedAt must be greater than or equal to createdAt.");
-        }
 
         return new Conversation
         {
             UserId = userId,
             Name = name,
-            CreatedAt = createdAt,
-            LastMessageUpdatedAt = lastMessageUpdatedAt
+            LastMessageUpdatedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds()
         };
     }
 
     public string Name { get; private set; } = null!;
-    public long CreatedAt { get; private set; }
+    public long CreatedAt { get; init; } = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     public long LastMessageUpdatedAt { get; private set; }
 
     public Guid UserId { get; private set; }
