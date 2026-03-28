@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SASS.Chassis.CQRS.Pipelines;
 
-internal sealed class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger ) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+public sealed class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger ) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     public async Task<TResponse> Handle(TRequest message, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
