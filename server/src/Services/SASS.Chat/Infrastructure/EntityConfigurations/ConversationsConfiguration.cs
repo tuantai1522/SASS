@@ -28,6 +28,10 @@ public sealed class ConversationsConfiguration : IEntityTypeConfiguration<Conver
             .IsRequired();
 
         builder
+            .HasIndex(x => new { x.UserId, x.CreatedAt, x.Id })
+            .HasDatabaseName("ix_conversations_user_id_created_at_id");
+
+        builder
             .HasMany(x => x.Messages)
             .WithOne(x => x.Conversation)
             .HasForeignKey(x => x.ConversationId)

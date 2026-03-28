@@ -20,12 +20,12 @@ public sealed class Conversation : Entity, IAggregateRoot
         {
             UserId = userId,
             Name = name,
-            LastMessageUpdatedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+            LastMessageUpdatedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
         };
     }
 
     public string Name { get; private set; } = null!;
-    public long CreatedAt { get; init; } = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+    public long CreatedAt { get; init; } = DateTimeOffset.Now.ToUnixTimeSeconds();
     public long LastMessageUpdatedAt { get; private set; }
 
     public Guid UserId { get; private set; }
