@@ -14,6 +14,23 @@ public sealed class ConversationRepository(ChatDbContext context) : IConversatio
         return entry.Entity;
     }
 
+    public Task<Conversation?> GetByIdAsync(
+        Guid conversationId,
+        Guid userId,
+        bool asTracking = false,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = asTracking
+            ? _context.Conversations
+            : _context.Conversations.AsNoTracking();
+
+        return query.FirstOrDefaultAsync(
+            x => x.Id == conversationId && x.UserId == userId,
+            cancellationToken
+        );
+    }
+
     public async Task<IReadOnlyList<Conversation>> GetConversationsByCursorAsync(
         Guid userId,
         long? createdAtCursor,
