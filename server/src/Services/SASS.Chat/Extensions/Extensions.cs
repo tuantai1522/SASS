@@ -11,9 +11,32 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostApplicationBuilder AddPersistenceServices(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.AddPostgresDbContext<ChatDbContext>(Components.Database.Chat, excludeDefaultInterceptors: true);
+        builder.Services.AddVersioning();
+        builder.Services.AddEndpoints(typeof(IChatApiMarker));
+        
+        
+        // Add exception handlers
+        builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+        builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+        
+        builder.Services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(typeof(IChatApiMarker).Assembly);
+
+            config.ApplyLoggingBehavior();
+            
+            config.ApplyValidationBehavior();
+        });        
+        // Add database configuration
+        builder.AddPersistenceServices();
+                
+        // Add google authentication
+        builder.AddGoogleAuthentication(builder.Configuration);
+        
         return builder;
     }
 

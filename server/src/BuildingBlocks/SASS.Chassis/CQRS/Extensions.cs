@@ -6,18 +6,18 @@ namespace SASS.Chassis.CQRS;
 
 public static class Extensions
 {
-    extension(IServiceCollection services)
+    extension(MediatRServiceConfiguration service)
     {
-        public IServiceCollection ApplyLoggingBehavior()
+        public MediatRServiceConfiguration ApplyLoggingBehavior()
         {
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            return services;
+            service.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            return service;
         }
 
-        public IServiceCollection ApplyValidationBehavior()
+        public MediatRServiceConfiguration ApplyValidationBehavior()
         {
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            return services;
+            service.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            return service;
         }
     }
 }
