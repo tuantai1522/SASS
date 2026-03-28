@@ -58,9 +58,13 @@ public static class AuthenticationExtensions
                 opt.RequireHttpsMetadata = false;
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtOptions:AccessTokenKey"]!)),
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtOptions:Secret"]!)),
+                    ValidateIssuer = true,
                     ValidIssuer = configuration["JwtOptions:Issuer"],
+                    ValidateAudience = true,
                     ValidAudience = configuration["JwtOptions:Audience"],
+                    ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
             });
