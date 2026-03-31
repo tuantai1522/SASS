@@ -11,6 +11,8 @@ public static class Extensions
     {
         // Add all options of system
         builder.AddOptions(builder.Configuration);
+        
+        builder.AddDefaultCors();
 
         builder.AddDefaultApiDocumentation();
 

@@ -5,6 +5,7 @@ global using SASS.Chassis.CQRS;
 global using SASS.Chassis.Exceptions;
 global using SASS.Chassis.Pagination;
 global using SASS.Chassis.Security;
+global using SASS.Chassis.Cors;
 global using SASS.SharedKernel.SeedWork;
 global using SASS.SharedKernel.Helpers;
 global using SASS.SharedKernel.Results;

@@ -19,6 +19,8 @@ var apiVersionSet = app.NewApiVersionSet()
 
 app.MapEndpoints(apiVersionSet);
 
+app.UseDefaultCors();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); 
