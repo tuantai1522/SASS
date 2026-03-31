@@ -1,5 +1,6 @@
 using FluentValidation;
 using SASS.Chassis.Security.Extensions;
+using SASS.Chassis.Storage.Extensions;
 using SASS.Chat.Configurations;
 using SASS.Chat.Infrastructure;
 
@@ -44,6 +45,8 @@ public static class Extensions
         
         // Add google authentication
         builder.AddGoogleAuthentication();
+        
+        builder.AddMediaStorage();
     }
 
     public static WebApplication UseApiDocumentation(this WebApplication app)
