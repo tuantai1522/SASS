@@ -9,7 +9,7 @@ public sealed class ConversationFile
     {
     }
 
-    public static ConversationFile Create(Guid conversationId, Guid fileId, bool active)
+    public static ConversationFile Create(Guid conversationId, Guid fileId)
     {
         EnsureIdentity(conversationId, nameof(conversationId));
         EnsureIdentity(fileId, nameof(fileId));
@@ -18,7 +18,7 @@ public sealed class ConversationFile
         {
             ConversationId = conversationId,
             FileId = fileId,
-            Active = active
+            Active = true
         };
     }
 

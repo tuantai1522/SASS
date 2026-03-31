@@ -1,5 +1,3 @@
-using SASS.Chat.Domain.AggregatesModel.Conversations;
-using SASS.Chat.Domain.AggregatesModel.Users;
 using SASS.Chat.Domain.Exceptions;
 
 namespace SASS.Chat.Domain.AggregatesModel.Files;
@@ -12,28 +10,30 @@ public sealed class File : Entity, IAggregateRoot
     {
     }
 
-    public static File Create(Guid userId, string name, string key, UploadStatus uploadStatus, long createdAt)
+    public static File Create(Guid userId, Guid conversationId, string name, string key, UploadStatus uploadStatus)
     {
         EnsureIdentity(userId, nameof(userId));
         EnsureRequiredText(name, nameof(name), 512);
         EnsureRequiredText(key, nameof(key), 2048);
-        EnsureEnum(uploadStatus, nameof(uploadStatus));
-        EnsureUnixMilliseconds(createdAt, nameof(createdAt));
+        EnsureIdentity(conversationId, nameof(conversationId));
 
-        return new File
+        var file = new File
         {
             UserId = userId,
             Name = name,
             Key = key,
             UploadStatus = uploadStatus,
-            CreatedAt = createdAt
         };
+
+        file.AddConversationFile(ConversationFile.Create(conversationId, file.Id));
+
+        return file;
     }
 
     public string Name { get; private set; } = null!;
     public string Key { get; private set; } = null!;
     public UploadStatus UploadStatus { get; private set; }
-    public long CreatedAt { get; private set; }
+    public long CreatedAt { get; init; } = DateTimeOffset.Now.ToUnixTimeSeconds();
 
     public Guid UserId { get; private set; }
     public User User { get; private set; } = null!;
@@ -42,7 +42,6 @@ public sealed class File : Entity, IAggregateRoot
 
     public void UpdateUploadStatus(UploadStatus uploadStatus)
     {
-        EnsureEnum(uploadStatus, nameof(uploadStatus));
         UploadStatus = uploadStatus;
     }
 
@@ -79,22 +78,6 @@ public sealed class File : Entity, IAggregateRoot
         if (value.Length > maxLength)
         {
             throw new ChatDomainException($"{fieldName} exceeds maximum length {maxLength}.");
-        }
-    }
-
-    private static void EnsureEnum(UploadStatus value, string fieldName)
-    {
-        if (!Enum.IsDefined(value))
-        {
-            throw new ChatDomainException($"{fieldName} is invalid.");
-        }
-    }
-
-    private static void EnsureUnixMilliseconds(long value, string fieldName)
-    {
-        if (value <= 0)
-        {
-            throw new ChatDomainException($"{fieldName} must be unix milliseconds greater than zero.");
         }
     }
 }
