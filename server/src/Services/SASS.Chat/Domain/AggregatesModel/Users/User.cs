@@ -15,8 +15,6 @@ public sealed class User : Entity, IAggregateRoot
 
     public static User Create(string email, string? avatarUrl)
     {
-        EnsureRequiredText(email, nameof(email), 512);
-
         return new User
         {
             Email = email,
@@ -59,18 +57,5 @@ public sealed class User : Entity, IAggregateRoot
         }
 
         _conversations.Add(conversation);
-    }
-
-    private static void EnsureRequiredText(string value, string fieldName, int maxLength)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ChatDomainException($"{fieldName} is required.");
-        }
-
-        if (value.Length > maxLength)
-        {
-            throw new ChatDomainException($"{fieldName} exceeds maximum length {maxLength}.");
-        }
     }
 }

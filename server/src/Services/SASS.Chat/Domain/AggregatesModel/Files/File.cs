@@ -12,11 +12,6 @@ public sealed class File : Entity, IAggregateRoot
 
     public static File Create(Guid userId, Guid conversationId, string name, string key, UploadStatus uploadStatus)
     {
-        EnsureIdentity(userId, nameof(userId));
-        EnsureRequiredText(name, nameof(name), 512);
-        EnsureRequiredText(key, nameof(key), 2048);
-        EnsureIdentity(conversationId, nameof(conversationId));
-
         var file = new File
         {
             UserId = userId,
@@ -58,26 +53,5 @@ public sealed class File : Entity, IAggregateRoot
         }
 
         _conversationFiles.Add(conversationFile);
-    }
-
-    private static void EnsureIdentity(Guid value, string fieldName)
-    {
-        if (value == Guid.Empty)
-        {
-            throw new ChatDomainException($"{fieldName} is invalid.");
-        }
-    }
-
-    private static void EnsureRequiredText(string value, string fieldName, int maxLength)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ChatDomainException($"{fieldName} is required.");
-        }
-
-        if (value.Length > maxLength)
-        {
-            throw new ChatDomainException($"{fieldName} exceeds maximum length {maxLength}.");
-        }
     }
 }

@@ -11,9 +11,6 @@ public sealed class ConversationFile
 
     public static ConversationFile Create(Guid conversationId, Guid fileId)
     {
-        EnsureIdentity(conversationId, nameof(conversationId));
-        EnsureIdentity(fileId, nameof(fileId));
-
         return new ConversationFile
         {
             ConversationId = conversationId,
@@ -33,13 +30,5 @@ public sealed class ConversationFile
     public void SetActive(bool active)
     {
         Active = active;
-    }
-
-    private static void EnsureIdentity(Guid value, string fieldName)
-    {
-        if (value == Guid.Empty)
-        {
-            throw new ChatDomainException($"{fieldName} is invalid.");
-        }
     }
 }

@@ -13,9 +13,6 @@ public sealed class Conversation : Entity, IAggregateRoot
 
     public static Conversation Create(Guid userId, string name)
     {
-        EnsureIdentity(userId, nameof(userId));
-        EnsureRequiredText(name, nameof(name), 512);
-
         return new Conversation
         {
             UserId = userId,
@@ -36,14 +33,11 @@ public sealed class Conversation : Entity, IAggregateRoot
 
     public void Rename(string name)
     {
-        EnsureRequiredText(name, nameof(name), 512);
         Name = name;
     }
 
     public void UpdateLastMessageTimestamp(long timestamp)
     {
-        EnsureUnixMilliseconds(timestamp, nameof(timestamp));
-
         if (timestamp < CreatedAt)
         {
             throw new ChatDomainException("timestamp must be greater than or equal to createdAt.");
@@ -84,35 +78,6 @@ public sealed class Conversation : Entity, IAggregateRoot
         if (message.CreatedAt > LastMessageUpdatedAt)
         {
             LastMessageUpdatedAt = message.CreatedAt;
-        }
-    }
-
-    private static void EnsureIdentity(Guid value, string fieldName)
-    {
-        if (value == Guid.Empty)
-        {
-            throw new ChatDomainException($"{fieldName} is invalid.");
-        }
-    }
-
-    private static void EnsureRequiredText(string value, string fieldName, int maxLength)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ChatDomainException($"{fieldName} is required.");
-        }
-
-        if (value.Length > maxLength)
-        {
-            throw new ChatDomainException($"{fieldName} exceeds maximum length {maxLength}.");
-        }
-    }
-
-    private static void EnsureUnixMilliseconds(long value, string fieldName)
-    {
-        if (value <= 0)
-        {
-            throw new ChatDomainException($"{fieldName} must be unix milliseconds greater than zero.");
         }
     }
 }
