@@ -3,12 +3,13 @@ using Microsoft.Extensions.Options;
 using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chassis.Storage;
 using SASS.Chat.Domain.AggregatesModel.Files;
+using SASS.Chat.Infrastructure;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 
 namespace SASS.Chat.Features.Files.GetPresignedUploadUrls;
 
 internal sealed class GetPresignedUploadUrlsCommandHandler(
-    IFileRepository fileRepository,
+    ChatDbContext dbContext,
     IUserProvider userProvider,
     IOptions<MediaStorageOptions> mediaStorageOptions,
     IServiceProvider serviceProvider
@@ -38,9 +39,8 @@ internal sealed class GetPresignedUploadUrlsCommandHandler(
             responseItems.Add(new PresignedUploadFileItem(file.Id, file.Name, file.Key, uploadUrl, contentType));
         }
 
-        await fileRepository.AddRangeAsync(files, cancellationToken);
-        
-        await fileRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.Files.AddRangeAsync(files, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new GetPresignedUploadUrlsResponse(responseItems);
     }

@@ -1,19 +1,20 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SASS.Chat.Domain.AggregatesModel.Files;
+using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Files.CompleteFilesUpload;
 
 internal sealed class CompleteFilesUploadCommandHandler(
-    IFileRepository fileRepository) : IRequestHandler<CompleteFilesUploadCommand, CompleteFilesUploadResponse>
+    ChatDbContext dbContext) : IRequestHandler<CompleteFilesUploadCommand, CompleteFilesUploadResponse>
 {
     public async Task<CompleteFilesUploadResponse> Handle(CompleteFilesUploadCommand request, CancellationToken cancellationToken)
     {
         var distinctFileIds = request.FileIds.Distinct().ToArray();
 
-        var files = await fileRepository.GetByIdsAsync(
-            distinctFileIds,
-            cancellationToken: cancellationToken
-        );
+        var files = await dbContext.Files
+            .Where(x => distinctFileIds.Contains(x.Id))
+            .ToListAsync(cancellationToken);
 
         if (files.Count != distinctFileIds.Length)
         {
@@ -25,7 +26,7 @@ internal sealed class CompleteFilesUploadCommandHandler(
             file.UpdateUploadStatus(UploadStatus.Processing);
         }
 
-        await fileRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new CompleteFilesUploadResponse(files.Select(x => x.Id).ToArray());
     }

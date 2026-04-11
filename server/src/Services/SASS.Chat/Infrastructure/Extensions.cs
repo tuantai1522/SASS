@@ -8,15 +8,7 @@ internal static class Extensions
     {
         public void AddPersistenceServices()
         {
-            var services = builder.Services;
-
-            builder.AddPostgresDbContext<ChatDbContext>(
-                Components.Database.Chat,
-                _ =>
-                {
-                    services.AddRepositories(typeof(IChatApiMarker));
-                }
-            );
+            builder.AddPostgresDbContext<ChatDbContext>(Components.Database.Chat);
         }
 
         public void AddGoogleAuthentication()

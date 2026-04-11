@@ -2,11 +2,12 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chat.Configurations;
+using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Conversations.CreateConversation;
 
 internal sealed class CreateConversationCommandHandler(
-    IConversationRepository conversationRepository,
+    ChatDbContext dbContext,
     IUserProvider userProvider,
     IOptions<SystemOptions> options) : IRequestHandler<CreateConversationCommand, IdResult>
 {
@@ -14,8 +15,8 @@ internal sealed class CreateConversationCommandHandler(
     {
         var conversation = Conversation.Create(userProvider.UserId, options.Value.DefaultConversationName);
 
-        await conversationRepository.AddAsync(conversation, cancellationToken);
-        await conversationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        await dbContext.Conversations.AddAsync(conversation, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new IdResult(conversation.Id);
     }

@@ -1,24 +1,28 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chassis.Utilities.Guards;
+using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Conversations.GetConversationById;
 
 internal sealed class GetConversationByIdQueryHandler(
-    IConversationRepository conversationRepository,
+    ChatDbContext dbContext,
     IUserProvider userProvider
 ) : IRequestHandler<GetConversationByIdQuery, GetConversationByIdResponse>
 {
     public async Task<GetConversationByIdResponse> Handle(GetConversationByIdQuery request, CancellationToken cancellationToken)
     {
-        var conversation = await conversationRepository.GetByIdAsync(
-            request.ConversationId,
-            userProvider.UserId,
-            cancellationToken: cancellationToken
-        );
+        var response = await dbContext.Conversations
+            .AsNoTracking()
+            .Where(x => x.Id == request.ConversationId && x.UserId == userProvider.UserId)
+            .Select(x => new GetConversationByIdResponse(x.Id, x.Name))
+            .FirstOrDefaultAsync(
+                cancellationToken
+            );
 
-        Guard.Against.NotFound(conversation, request.ConversationId);
-        
-        return new GetConversationByIdResponse(conversation.Id, conversation.Name);
+        Guard.Against.NotFound(response, request.ConversationId);
+
+        return response;
     }
 }

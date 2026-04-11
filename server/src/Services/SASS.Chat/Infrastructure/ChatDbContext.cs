@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SASS.Chat.Domain.AggregatesModel.Conversations;
-using SASS.Chat.Domain.AggregatesModel.Files;
-using SASS.Chat.Domain.AggregatesModel.Users;
+using SASS.Chassis.Repository;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 
 namespace SASS.Chat.Infrastructure;

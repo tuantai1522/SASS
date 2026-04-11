@@ -1,9 +1,11 @@
 using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SASS.Chassis.Security.TokenGeneration;
 using SASS.Chat.Configurations;
+using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Auth.Google.AuthorizeGoogle;
 
@@ -11,7 +13,7 @@ internal sealed class AuthorizeGoogleCommandHandler(
     IHttpClientFactory httpClientFactory,
     IOptions<GoogleAuthOptions> options,
     ITokenProvider tokenProvider,
-    IUserRepository userRepository) : IRequestHandler<AuthorizeGoogleCommand, AuthorizeGoogleResponse>
+    ChatDbContext dbContext) : IRequestHandler<AuthorizeGoogleCommand, AuthorizeGoogleResponse>
 {
     public async Task<AuthorizeGoogleResponse> Handle(AuthorizeGoogleCommand request, CancellationToken cancellationToken)
     {
@@ -31,13 +33,13 @@ internal sealed class AuthorizeGoogleCommandHandler(
         }
 
         var normalizedEmail = googleUser.Email.Trim().ToLowerInvariant();
-        var user = await userRepository.GetByEmailAsync(normalizedEmail, cancellationToken);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
 
         if (user is null)
         {
             user = User.Create(normalizedEmail, null);
-            await userRepository.AddAsync(user, cancellationToken);
-            await userRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+            await dbContext.Users.AddAsync(user, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
         }
 
         return new AuthorizeGoogleResponse(tokenProvider.Create(user.Id, user.Email));

@@ -1,10 +1,12 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SASS.Chassis.Security.UserRetrieval;
+using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Conversations.GetConversations;
 
 internal sealed class GetConversationsQueryHandler(
-    IConversationRepository conversationRepository,
+    ChatDbContext dbContext,
     IUserProvider userProvider
 ) : IRequestHandler<GetConversationsQuery, CursorPagedResponse<GetConversationsResponse>>
 {
@@ -21,14 +23,23 @@ internal sealed class GetConversationsQueryHandler(
             createdAt = decodedCursor?.CreatedAt;
         }
 
-        var conversations = await conversationRepository.GetConversationsByCursorAsync(
-            userProvider.UserId,
-            createdAt,
-            lastId,
-            request.CursorRequest.Limit,
-            request.CursorRequest.IsAscending,
-            cancellationToken
-        );
+        var query = dbContext.Conversations
+            .AsNoTracking()
+            .Where(x => x.UserId == userProvider.UserId);
+
+        if (createdAt.HasValue && lastId.HasValue)
+        {
+            query = request.CursorRequest.IsAscending
+                ? query.Where(x => EF.Functions.GreaterThan(ValueTuple.Create(x.CreatedAt, x.Id), ValueTuple.Create(createdAt, lastId)))
+                : query.Where(x => EF.Functions.LessThan(ValueTuple.Create(x.CreatedAt, x.Id), ValueTuple.Create(createdAt, lastId)));
+        }
+
+        var conversations = await query
+            .OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
+            .Select(x => new GetConversationsResponse(x.Id, x.Name, x.CreatedAt, x.LastMessageUpdatedAt))
+            .Take(request.CursorRequest.Limit + 1)
+            .ToListAsync(cancellationToken);
 
         var hasNextPage = conversations.Count > request.CursorRequest.Limit;
         var pageItems = hasNextPage
@@ -42,10 +53,6 @@ internal sealed class GetConversationsQueryHandler(
             nextCursor = CursorToken.Encode(new CursorToken(last.CreatedAt, last.Id));
         }
 
-        var items = pageItems
-            .Select(x => new GetConversationsResponse(x.Id, x.Name, x.CreatedAt, x.LastMessageUpdatedAt))
-            .ToList();
-
-        return new CursorPagedResponse<GetConversationsResponse>(items, nextCursor, hasNextPage);
+        return new CursorPagedResponse<GetConversationsResponse>(pageItems, nextCursor, hasNextPage);
     }
 }
