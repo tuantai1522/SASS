@@ -1,4 +1,3 @@
-using SASS.Chat.Domain.Exceptions;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 
 namespace SASS.Chat.Domain.AggregatesModel.Users;
@@ -8,6 +7,7 @@ public sealed class User : Entity, IAggregateRoot
     private readonly List<RefreshToken> _refreshTokens = [];
     private readonly List<File> _files = [];
     private readonly List<Conversation> _conversations = [];
+    private readonly List<Project> _projects = [];
 
     private User()
     {
@@ -28,34 +28,25 @@ public sealed class User : Entity, IAggregateRoot
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
     public IReadOnlyCollection<File> Files => _files;
     public IReadOnlyCollection<Conversation> Conversations => _conversations;
+    public IReadOnlyCollection<Project> Projects => _projects;
 
     public void AddRefreshToken(RefreshToken refreshToken)
     {
-        if (refreshToken.UserId != Id)
-        {
-            throw new ChatDomainException("Refresh token user id does not match current user.");
-        }
-
         _refreshTokens.Add(refreshToken);
     }
 
     public void AddFile(File file)
     {
-        if (file.UserId != Id)
-        {
-            throw new ChatDomainException("File user id does not match current user.");
-        }
-
         _files.Add(file);
     }
 
     public void AddConversation(Conversation conversation)
     {
-        if (conversation.UserId != Id)
-        {
-            throw new ChatDomainException("Conversation user id does not match current user.");
-        }
-
         _conversations.Add(conversation);
+    }
+    
+    public void AddProject(Project project)
+    {
+        _projects.Add(project);
     }
 }

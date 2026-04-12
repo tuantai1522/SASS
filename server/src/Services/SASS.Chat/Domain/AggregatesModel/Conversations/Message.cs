@@ -1,5 +1,3 @@
-using SASS.Chat.Domain.Exceptions;
-
 namespace SASS.Chat.Domain.AggregatesModel.Conversations;
 
 public sealed class Message : Entity

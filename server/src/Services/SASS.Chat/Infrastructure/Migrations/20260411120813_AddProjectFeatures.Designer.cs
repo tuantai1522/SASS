@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SASS.Chat.Infrastructure;
@@ -11,9 +12,11 @@ using SASS.Chat.Infrastructure;
 namespace SASS.Chat.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260411120813_AddProjectFeatures")]
+    partial class AddProjectFeatures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,12 +170,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("uuidv7()");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("code");
-
                     b.Property<long>("CreatedAt")
                         .HasColumnType("bigint")
                         .HasColumnName("created_at");
@@ -187,12 +184,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("is_deleted");
 
-                    b.Property<int>("NextTaskSequence")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("next_task_sequence");
-
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid")
                         .HasColumnName("owner_id");
@@ -205,11 +196,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_projects");
-
-                    b.HasIndex("OwnerId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("ux_projects_owner_id_code_active")
-                        .HasFilter("is_deleted = false");
 
                     b.HasIndex("OwnerId", "IsDeleted", "Id")
                         .HasDatabaseName("ix_projects_owner_id_is_deleted_id");
@@ -264,10 +250,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("assignee_id");
 
-                    b.Property<int>("Code")
-                        .HasColumnType("integer")
-                        .HasColumnName("code");
-
                     b.Property<long>("CreatedAt")
                         .HasColumnType("bigint")
                         .HasColumnName("created_at");
@@ -319,11 +301,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasIndex("StatusId")
                         .HasDatabaseName("ix_tasks_status_id");
-
-                    b.HasIndex("ProjectId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("ux_tasks_project_id_code_active")
-                        .HasFilter("is_deleted = false");
 
                     b.HasIndex("ProjectId", "IsDeleted", "CreatedAt", "Id")
                         .HasDatabaseName("ix_tasks_project_id_is_deleted_created_at_id");

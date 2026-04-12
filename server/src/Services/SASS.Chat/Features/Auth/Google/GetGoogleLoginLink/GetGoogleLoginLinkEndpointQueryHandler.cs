@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Options;
 using SASS.Chat.Configurations;
+using Task = System.Threading.Tasks.Task;
 
 namespace SASS.Chat.Features.Auth.Google.GetGoogleLoginLink;
 

@@ -1,4 +1,3 @@
-using SASS.Chat.Domain.Exceptions;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 
 namespace SASS.Chat.Domain.AggregatesModel.Conversations;

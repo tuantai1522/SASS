@@ -10,4 +10,5 @@ global using SASS.SharedKernel.Results;
 global using SASS.Constants.Core;
 global using SASS.Constants.Infrastructure;
 global using SASS.Chat.Domain.AggregatesModel.Conversations;
+global using SASS.Chat.Domain.AggregatesModel.Projects;
 global using SASS.Chat.Domain.AggregatesModel.Users;
