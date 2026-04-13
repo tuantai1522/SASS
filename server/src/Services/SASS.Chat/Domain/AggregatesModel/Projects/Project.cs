@@ -9,8 +9,13 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
     {
     }
 
-    public static Project Create(Guid ownerId, string code, string title, string? description, 
-        IReadOnlyList<Guid> memberIds, IReadOnlyList<Guid> leaderIds)
+    public static Project Create(
+        Guid ownerId,
+        string code,
+        string title,
+        string? description,
+        IReadOnlyList<Guid> memberIds,
+        IReadOnlyList<Guid> leaderIds)
     {
         var project = new Project
         {
@@ -21,7 +26,7 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
             NextTaskSequence = 1,
             CreatedAt = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
-        
+
         project.AddMembers(memberIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Member)).ToList());
         project.AddMembers(leaderIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Leader)).ToList());
 
@@ -45,7 +50,7 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
     public IReadOnlyCollection<ProjectMember> Members => _members;
     public IReadOnlyCollection<Task> Tasks => _tasks;
 
-    public void Rename(string name)
+    public void ChangeName(string name)
     {
         Title = name;
     }

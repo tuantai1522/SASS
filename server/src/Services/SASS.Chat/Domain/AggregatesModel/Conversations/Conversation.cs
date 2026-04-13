@@ -31,7 +31,7 @@ public sealed class Conversation : Entity, IAggregateRoot
     public IReadOnlyCollection<ConversationFile> ConversationFiles => _conversationFiles;
     public IReadOnlyCollection<Message> Messages => _messages;
 
-    public void Rename(string name)
+    public void ChangeName(string name)
     {
         Name = name;
     }

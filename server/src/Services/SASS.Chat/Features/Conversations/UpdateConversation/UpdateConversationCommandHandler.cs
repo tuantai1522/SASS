@@ -21,7 +21,7 @@ internal sealed class UpdateConversationCommandHandler(
 
         Guard.Against.NotFound(conversation, request.ConversationId);
 
-        conversation.Rename(request.Name);
+        conversation.ChangeName(request.Name);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return new IdResult(conversation.Id);
