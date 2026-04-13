@@ -18,10 +18,17 @@ internal sealed class DeleteProjectCommandHandler(
         var project = await dbContext.Projects
             .Include(x => x.Members)
             .Include(x => x.Tasks)
-            .FirstOrDefaultAsync(x => x.Id == request.ProjectId &&
-                x.Members.Any(member => member.UserId == userId && member.Role == ProjectMemberRole.Leader), cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.ProjectId, cancellationToken);
 
         Guard.Against.NotFound(project, request.ProjectId);
+
+        var canDeleteProject = project.Members
+            .Any(member => member.UserId == userId && member.Role == ProjectMemberRole.Leader);
+
+        if (!canDeleteProject)
+        {
+            throw new UnauthorizedAccessException("You are not authorized to delete this project.");
+        }
 
         project.Delete();
 
