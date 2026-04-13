@@ -9,17 +9,23 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
     {
     }
 
-    public static Project Create(Guid ownerId, string code, string title, string? description)
+    public static Project Create(Guid ownerId, string code, string title, string? description, 
+        IReadOnlyList<Guid> memberIds, IReadOnlyList<Guid> leaderIds)
     {
-        return new Project
+        var project = new Project
         {
             OwnerId = ownerId,
             Code = code,
             Title = title,
             Description = description,
             NextTaskSequence = 1,
-            CreatedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CreatedAt = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
+        
+        project.AddMembers(memberIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Member)).ToList());
+        project.AddMembers(leaderIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Leader)).ToList());
+
+        return project;
     }
 
     public Guid OwnerId { get; private init; }
@@ -61,7 +67,7 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
         return code;
     }
 
-    public void AddMember(IReadOnlyList<ProjectMember> members)
+    public void AddMembers(IReadOnlyList<ProjectMember> members)
     {
         _members.AddRange(members);
     }
