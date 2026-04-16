@@ -11,9 +11,6 @@ public sealed class TaskPrioritiesConfiguration : IEntityTypeConfiguration<TaskP
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
-            .ValueGeneratedNever();
-
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(64);
@@ -21,10 +18,16 @@ public sealed class TaskPrioritiesConfiguration : IEntityTypeConfiguration<TaskP
         builder.HasIndex(x => x.Name)
             .IsUnique();
 
+        builder.Property(x => x.Order)
+            .IsRequired();
+        
+        builder.HasIndex(x => x.Order)
+            .IsUnique();
+        
         builder.HasData(
-            new { Id = new Guid("12fff476-3636-4316-a31b-55d8ad9ee545"), Name = "Low" },
-            new { Id = new Guid("4a034f3c-dc71-4582-acb9-af1bbca483d1"), Name = "Medium" },
-            new { Id = new Guid("9c1bac75-134c-4155-b0a9-663631db4302"), Name = "High" }
+            new { Id = new Guid("12fff476-3636-4316-a31b-55d8ad9ee545"), Name = "Low", Order = 1 },
+            new { Id = new Guid("4a034f3c-dc71-4582-acb9-af1bbca483d1"), Name = "Medium", Order = 2 },
+            new { Id = new Guid("9c1bac75-134c-4155-b0a9-663631db4302"), Name = "High", Order = 3 }
         );
     }
 }

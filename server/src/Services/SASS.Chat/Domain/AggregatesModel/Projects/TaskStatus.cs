@@ -7,4 +7,6 @@ public sealed class TaskStatus : Entity
     }
 
     public string Name { get; private init; } = null!;
+    
+    public int Order { get; private init; }
 }
