@@ -70,11 +70,31 @@ public sealed class Task : Entity, ISoftDelete
         StatusId = statusId;
     }
 
-    public void Rename(string title)
+    public void ChangeTitle(string title)
     {
         Title = title;
     }
-
+    
+    public void ChangeDescription(string? description)
+    {
+        Description = description;
+    }
+    
+    public void ChangeStartDate(DateOnly? startDate)
+    {
+        StartDate = startDate;
+    }
+    
+    public void ChangeDueDate(DateOnly? dueDate)
+    {
+        DueDate = dueDate;
+    }
+    
+    public void ChangeAssignee(Guid? assigneeId)
+    {
+        AssigneeId = assigneeId;
+    }
+    
     public void Delete()
     {
         IsDeleted = true;
