@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SASS.Chassis.Security.PasswordHashing;
 using SASS.Chassis.Security.Settings;
 using SASS.Chassis.Security.TokenGeneration;
 using SASS.Chassis.Security.UserRetrieval;
@@ -76,5 +77,18 @@ public static class AuthenticationExtensions
             .AddScoped<ITokenProvider, TokenProvider>();
         
         return builder;
+    }
+
+    public static void AddPasswordHashingService(this IHostApplicationBuilder builder)
+    {
+        var services = builder.Services;
+        var configuration = builder.Configuration;
+        
+        services.AddOptions<PasswordHashingOptions>()
+            .Bind(configuration.GetSection(nameof(PasswordHashingOptions)))
+            .Validate(o => !string.IsNullOrWhiteSpace(o.CurrentAlgorithm), "PasswordHashingOptions is invalid")
+            .ValidateOnStart();
+        
+        services.AddKeyedSingleton<IPasswordHashAlgorithm, Pbkdf2PasswordHashAlgorithm>("pbkdf2-sha512");
     }
 }
