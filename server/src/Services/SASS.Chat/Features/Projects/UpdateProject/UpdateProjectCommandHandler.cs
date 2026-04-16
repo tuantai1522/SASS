@@ -24,7 +24,7 @@ internal sealed class UpdateProjectCommandHandler(
             })
             .FirstOrDefaultAsync(cancellationToken);
 
-        Guard.Against.NotFound(projectAccess, request.ProjectId);
+        Guard.Against.NotFound(projectAccess?.Project, request.ProjectId);
 
         if (!projectAccess.IsLeader)
         {

@@ -20,7 +20,7 @@ internal sealed class GetProjectTasksQueryHandler(
             .AsNoTracking()
             .AnyAsync(x => x.Id == request.ProjectId && x.Members.Any(m => m.UserId == userId), cancellationToken: cancellationToken);
 
-        Guard.Against.NotFound(projectExists, request.ProjectId);
+        Guard.Against.NotFound<Project>(projectExists, request.ProjectId);
 
         var query = dbContext.Tasks
             .AsNoTracking()

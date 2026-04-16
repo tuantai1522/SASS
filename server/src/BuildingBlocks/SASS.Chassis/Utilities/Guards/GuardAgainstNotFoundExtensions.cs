@@ -18,7 +18,7 @@ public static class GuardAgainstNotFoundExtensions
         /// Thrown when the value is null,
         /// indicating that the entity with the specified <paramref name="id" /> was not found.
         /// </exception>
-        public void NotFound<T>(bool exists, string id)
+        public void NotFound<T>(bool exists, Guid id)
         {
             if (exists)
             {
