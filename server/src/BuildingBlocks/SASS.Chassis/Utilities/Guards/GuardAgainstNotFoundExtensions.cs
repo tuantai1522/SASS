@@ -12,20 +12,20 @@ public static class GuardAgainstNotFoundExtensions
         /// for the specified <paramref name="id" />.
         /// </summary>
         /// <typeparam name="T">The type of the value being checked.</typeparam>
-        /// <param name="value">The value to check for null.</param>
+        /// <param name="exists">If it exists => do nothing</param>
         /// <param name="id">The identifier associated with the entity being checked.</param>
         /// <exception cref="NotFoundException">
         /// Thrown when the value is null,
         /// indicating that the entity with the specified <paramref name="id" /> was not found.
         /// </exception>
-        public void NotFound<T>([NotNull] T? value, string id)
+        public void NotFound<T>(bool exists, string id)
         {
-            if (value is not null)
+            if (exists)
             {
                 return;
             }
-
-            throw NotFoundException.For<T>(id);
+            
+            throw new NotFoundException($"Id: {id} not found");
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ public static class GuardAgainstNotFoundExtensions
                 return;
             }
 
-            throw NotFoundException.For<T>(id);
+            throw new NotFoundException($"Id: {id} not found");
         }
     }
 }

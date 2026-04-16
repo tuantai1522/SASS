@@ -4,8 +4,6 @@ using Npgsql;
 using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chassis.Utilities.Guards;
 using SASS.Chat.Infrastructure;
-using TaskPriorityEntity = SASS.Chat.Domain.AggregatesModel.Projects.TaskPriority;
-using TaskStatusEntity = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
 using ProjectTask = SASS.Chat.Domain.AggregatesModel.Projects.Task;
 
 namespace SASS.Chat.Features.Projects.AddProjectTask;
@@ -26,19 +24,13 @@ internal sealed class AddProjectTaskCommandHandler(
         var statusExists = await dbContext.TaskStatuses
             .AnyAsync(x => x.Id == request.StatusId, cancellationToken);
 
-        if (!statusExists)
-        {
-            throw NotFoundException.For<TaskStatusEntity>(request.StatusId);
-        }
+        Guard.Against.NotFound(statusExists, request.StatusId);
 
         var priorityExists = await dbContext.TaskPriorities
             .AnyAsync(x => x.Id == request.PriorityId, cancellationToken);
 
-        if (!priorityExists)
-        {
-            throw NotFoundException.For<TaskPriorityEntity>(request.PriorityId);
-        }
-
+        Guard.Against.NotFound(priorityExists, request.StatusId);
+        
         for (var attempt = 0; attempt < MaxTaskCodeGenerationRetries; attempt++)
         {
             var project = await dbContext.Projects
@@ -52,7 +44,7 @@ internal sealed class AddProjectTaskCommandHandler(
 
             if (!isLeader)
             {
-                throw new UnauthorizedAccessException("You do not have permission to create tasks in this project.");
+                throw new UnauthorizedException("You do not have permission to create tasks in this project.");
             }
 
             if (request.AssigneeId.HasValue)

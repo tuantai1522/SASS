@@ -5,18 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace SASS.Chassis.Exceptions;
 
 
-public sealed class NotFoundException(string message) : Exception(message)
-{
-    public static NotFoundException For<T>(Guid id)
-    {
-        return For<T>(id.ToString());
-    }
-
-    public static NotFoundException For<T>(string id)
-    {
-        return new($"{typeof(T).Name} with id {id} not found.");
-    }
-}
+public sealed class NotFoundException(string message) : Exception(message);
 
 /// <summary>
 /// Todo: To check PerRequestLogBuffer
@@ -42,9 +31,10 @@ public sealed class NotFoundExceptionHandler(ILogger<NotFoundExceptionHandler> l
             notFoundException.Message
         );
 
-        await TypedResults
-            .NotFound(new { Detail = notFoundException.Message })
-            .ExecuteAsync(httpContext);
+        await Results.Problem(
+            detail: exception.Message,
+            statusCode: StatusCodes.Status404NotFound
+        ).ExecuteAsync(httpContext);
 
         return true;
     }

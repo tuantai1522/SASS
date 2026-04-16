@@ -26,7 +26,7 @@ internal sealed class DeleteProjectMemberCommandHandler(
 
         if (!isLeader)
         {
-            throw new UnauthorizedAccessException("You do not have permission to remove project members.");
+            throw new UnauthorizedException("You do not have permission to remove project members.");
         }
 
         var member = project.Members

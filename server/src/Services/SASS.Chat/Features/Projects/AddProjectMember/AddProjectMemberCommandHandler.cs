@@ -26,7 +26,7 @@ internal sealed class AddProjectMemberCommandHandler(
 
         if (!isLeader)
         {
-            throw new UnauthorizedAccessException("You do not have permission to add members to this project.");
+            throw new UnauthorizedException("You do not have permission to add members to this project.");
         }
 
         var memberExists = project.Members

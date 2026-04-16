@@ -27,7 +27,7 @@ internal sealed class DeleteProjectCommandHandler(
 
         if (!canDeleteProject)
         {
-            throw new UnauthorizedAccessException("You are not authorized to delete this project.");
+            throw new UnauthorizedException("You are not authorized to delete this project.");
         }
 
         project.Delete();
