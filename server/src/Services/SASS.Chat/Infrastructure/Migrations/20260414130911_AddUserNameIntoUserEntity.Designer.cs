@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SASS.Chat.Infrastructure;
@@ -11,9 +12,11 @@ using SASS.Chat.Infrastructure;
 namespace SASS.Chat.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414130911_AddUserNameIntoUserEntity")]
+    partial class AddUserNameIntoUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,34 +412,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SASS.Chat.Domain.AggregatesModel.Users.LocalCredential", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("PasswordAlgo")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("password_algo");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)")
-                        .HasColumnName("password_hash");
-
-                    b.Property<long>("PasswordUpdatedAt")
-                        .HasColumnType("bigint")
-                        .HasColumnName("password_updated_at");
-
-                    b.HasKey("UserId")
-                        .HasName("pk_local_credentials");
-
-                    b.ToTable("local_credentials", (string)null);
-                });
-
             modelBuilder.Entity("SASS.Chat.Domain.AggregatesModel.Users.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -481,24 +456,20 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnType("character varying(512)")
                         .HasColumnName("avatar_url");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("display_name");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)")
                         .HasColumnName("email");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("user_name");
+
                     b.HasKey("Id")
                         .HasName("pk_users");
-
-                    b.HasIndex("DisplayName")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_display_name");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -635,18 +606,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("SASS.Chat.Domain.AggregatesModel.Users.LocalCredential", b =>
-                {
-                    b.HasOne("SASS.Chat.Domain.AggregatesModel.Users.User", "User")
-                        .WithOne("LocalCredential")
-                        .HasForeignKey("SASS.Chat.Domain.AggregatesModel.Users.LocalCredential", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_local_credentials_users_user_id");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SASS.Chat.Domain.AggregatesModel.Users.RefreshToken", b =>
                 {
                     b.HasOne("SASS.Chat.Domain.AggregatesModel.Users.User", "User")
@@ -683,8 +642,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                     b.Navigation("Conversations");
 
                     b.Navigation("Files");
-
-                    b.Navigation("LocalCredential");
 
                     b.Navigation("Projects");
 

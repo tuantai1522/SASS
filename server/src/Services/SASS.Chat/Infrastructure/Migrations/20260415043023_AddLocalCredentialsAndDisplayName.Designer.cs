@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SASS.Chat.Infrastructure;
@@ -11,9 +12,11 @@ using SASS.Chat.Infrastructure;
 namespace SASS.Chat.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260415043023_AddLocalCredentialsAndDisplayName")]
+    partial class AddLocalCredentialsAndDisplayName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -495,10 +498,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
-
-                    b.HasIndex("DisplayName")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_display_name");
 
                     b.HasIndex("Email")
                         .IsUnique()

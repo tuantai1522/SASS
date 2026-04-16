@@ -15,12 +15,19 @@ public sealed class UsersConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Email)
             .IsRequired()
             .HasMaxLength(512);
-        
+
         builder.HasIndex(x => x.Email)
             .IsUnique();
 
         builder.Property(x => x.AvatarUrl)
             .HasMaxLength(512);
+
+        builder.Property(x => x.DisplayName)
+            .IsRequired()
+            .HasMaxLength(256);
+        
+        builder.HasIndex(x => x.DisplayName)
+            .IsUnique();
 
         builder
             .HasMany(x => x.RefreshTokens)
@@ -39,7 +46,7 @@ public sealed class UsersConfiguration : IEntityTypeConfiguration<User>
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder
             .HasMany(x => x.Projects)
             .WithOne(x => x.Owner)

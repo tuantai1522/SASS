@@ -13,17 +13,20 @@ public sealed class User : Entity, IAggregateRoot
     {
     }
 
-    public static User Create(string email, string? avatarUrl)
+    public static User Create(string email, string? avatarUrl, string displayName)
     {
         return new User
         {
             Email = email,
-            AvatarUrl = avatarUrl
+            AvatarUrl = avatarUrl,
+            DisplayName = displayName
         };
     }
 
     public string Email { get; private set; } = null!;
     public string? AvatarUrl { get; private set; }
+    public string DisplayName { get; private set; } = null!;
+    public LocalCredential? LocalCredential { get; private set; }
 
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
     public IReadOnlyCollection<File> Files => _files;
@@ -44,9 +47,14 @@ public sealed class User : Entity, IAggregateRoot
     {
         _conversations.Add(conversation);
     }
-    
+
     public void AddProject(Project project)
     {
         _projects.Add(project);
+    }
+
+    public void AddLocalCredential(LocalCredential localCredential)
+    {
+        LocalCredential = localCredential;
     }
 }

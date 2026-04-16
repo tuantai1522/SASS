@@ -37,10 +37,11 @@ internal sealed class AuthorizeGoogleCommandHandler(
 
         if (user is null)
         {
-            user = User.Create(normalizedEmail, null);
+            user = User.Create(normalizedEmail, null, googleUser.Name);
             await dbContext.Users.AddAsync(user, cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
         }
+
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new AuthorizeGoogleResponse(tokenProvider.Create(user.Id, user.Email));
 
@@ -106,5 +107,8 @@ internal sealed class AuthorizeGoogleCommandHandler(
     {
         [JsonPropertyName("email")]
         public string Email { get; init; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
     }
 }

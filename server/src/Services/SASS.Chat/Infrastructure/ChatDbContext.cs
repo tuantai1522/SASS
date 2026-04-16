@@ -9,6 +9,7 @@ namespace SASS.Chat.Infrastructure;
 public sealed class ChatDbContext(DbContextOptions<ChatDbContext> options) : DbContext(options), IUnitOfWork
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<LocalCredential> LocalCredentials => Set<LocalCredential>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<File> Files => Set<File>();
     public DbSet<Conversation> Conversations => Set<Conversation>();
