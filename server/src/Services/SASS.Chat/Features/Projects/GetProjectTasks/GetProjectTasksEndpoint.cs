@@ -8,7 +8,7 @@ public sealed class GetProjectTasksEndpoint : IEndpoint<Ok<PagedResult<GetProjec
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("projects/{projectId}/tasks/search", HandleAsync)
+        app.MapPost("projects/{projectId:guid}/tasks/search", HandleAsync)
             .WithTags(nameof(Project))
             .WithName(nameof(GetProjectTasksEndpoint))
             .WithDescription("Get project tasks with normal pagination")
