@@ -11,7 +11,7 @@ public sealed class TasksConfiguration : IEntityTypeConfiguration<Task>
         builder.ToTable("tasks");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
+        builder.Property(x => x.Id).ValueGeneratedNever();
 
         builder.Property(x => x.Title)
             .IsRequired()
