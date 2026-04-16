@@ -21,12 +21,25 @@ public static class Extensions
         builder.Services.AddEndpoints(typeof(IChatApiMarker));
         
         builder.AddDefaultAuthentication();
+        builder.AddPasswordHashingService();
         builder.Services.AddAuthorization();
         
         // Add exception handlers
+        // Exception related to bad request (404)
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+
+        // Exception related to not found (400)
         builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+
+        // Exception related to conflict (409)
+        builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
+
+        // Exception related to unauthorized (401)
+        builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();
+        
+        // Global exception
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        
         builder.Services.AddProblemDetails();
         
         builder.Services.AddMediatR(config =>

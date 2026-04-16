@@ -44,10 +44,6 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
     {
         return exception switch
         {
-            UnauthorizedAccessException => (
-                StatusCodes.Status403Forbidden,
-                exception.Message
-            ),
             ArgumentOutOfRangeException or ArgumentNullException or ArgumentException => (
                 StatusCodes.Status400BadRequest,
                 exception.Message
