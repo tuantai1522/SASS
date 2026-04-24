@@ -3,13 +3,13 @@ using MediatR;
 
 namespace SASS.Chat.Features.Projects.GetProjects;
 
-public sealed class GetProjectsQuery : PagedRequest, IRequest<PagedResult<GetProjectsItemResponse>>
+public sealed class GetProjectsQuery : PagedRequest, IRequest<GetProjectsResponse>
 {
     /// <summary>
     /// This can be used to search title
     /// </summary>
     public string? Search { get; init; }
-    
+
     /// <summary>
     /// Order by field CreatedAt, Title
     /// </summary>

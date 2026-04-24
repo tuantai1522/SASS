@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SASS.Chassis.Security.UserRetrieval;
+using SASS.Chat.Features.Projects.Utils;
 using SASS.Chat.Infrastructure;
 
 namespace SASS.Chat.Features.Projects.GetProjects;
@@ -8,9 +9,9 @@ namespace SASS.Chat.Features.Projects.GetProjects;
 internal sealed class GetProjectsQueryHandler(
     ChatDbContext dbContext,
     IUserProvider userProvider)
-    : IRequestHandler<GetProjectsQuery, PagedResult<GetProjectsItemResponse>>
+    : IRequestHandler<GetProjectsQuery, GetProjectsResponse>
 {
-    public async Task<PagedResult<GetProjectsItemResponse>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<GetProjectsResponse> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
         var page = request.Page;
         var pageSize = request.PageSize;
@@ -21,7 +22,7 @@ internal sealed class GetProjectsQueryHandler(
 
         var query = dbContext.Projects
             .AsNoTracking()
-            .Where(x => x.OwnerId == userId || x.Members.Any(m => m.UserId == userId));
+            .Where(x => x.Members.Any(m => m.UserId == userId));
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -48,13 +49,24 @@ internal sealed class GetProjectsQueryHandler(
                 Title = x.Title,
                 Description = x.Description,
                 CreatedAt = x.CreatedAt,
-                Role = x.Members
-                    .Where(m => m.UserId == userId)
-                    .Select(m => m.Role.ToString())
-                    .FirstOrDefault() ?? nameof(ProjectMemberRole.Member)
+                Role = x.Members.Where(m => m.UserId == userId)
+                        .Select(m => m.Role.ToString())
+                        .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
+                Progress = ProjectProgressCalculator.Calculate(x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)), x.Tasks.Count(t => !t.IsDeleted))
             })
             .ToListAsync(cancellationToken);
 
-        return new PagedResult<GetProjectsItemResponse>(items, page, pageSize, totalItems);
+        var totalPages = (long)Math.Ceiling((double)totalItems / pageSize);
+
+        return new GetProjectsResponse
+        {
+            Items = items,
+            PageIndex = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages,
+            HasPreviousPage = page > 1,
+            HasNextPage = page < totalPages
+        };
     }
 }

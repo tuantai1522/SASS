@@ -8,4 +8,6 @@ public sealed class GetProjectByIdResponse
     public string? Description { get; init; }
     public long CreatedAt { get; init; }
     public Guid OwnerId { get; init; }
+    public string Role { get; init; } = string.Empty;
+    public int Progress { get; init; }
 }

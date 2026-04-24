@@ -13,7 +13,8 @@ public sealed class GetMeEndpoint : IEndpoint<Ok<GetMeResponse>, ISender>
             .WithDescription("Get me information")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization()
-            .Produces<GetMeResponse>();
+            .Produces<GetMeResponse>()
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
     }
 
     public async Task<Ok<GetMeResponse>> HandleAsync(

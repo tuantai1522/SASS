@@ -8,4 +8,5 @@ public sealed class GetProjectsItemResponse
     public string? Description { get; init; }
     public long CreatedAt { get; init; }
     public string Role { get; init; } = string.Empty;
+    public int Progress { get; init; }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SASS.Chat.Features.Projects.GetProjects;
 
-public sealed class GetProjectsEndpoint : IEndpoint<Ok<PagedResult<GetProjectsItemResponse>>, ISender, GetProjectsQuery>
+public sealed class GetProjectsEndpoint : IEndpoint<Ok<GetProjectsResponse>, ISender, GetProjectsQuery>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -13,10 +13,10 @@ public sealed class GetProjectsEndpoint : IEndpoint<Ok<PagedResult<GetProjectsIt
             .WithDescription("Get projects with normal pagination")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization()
-            .Produces<PagedResult<GetProjectsItemResponse>>();
+            .Produces<GetProjectsResponse>();
     }
 
-    public async Task<Ok<PagedResult<GetProjectsItemResponse>>> HandleAsync(
+    public async Task<Ok<GetProjectsResponse>> HandleAsync(
         ISender sender,
         [AsParameters] GetProjectsQuery query,
         CancellationToken cancellationToken = default)

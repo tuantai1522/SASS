@@ -10,7 +10,7 @@ internal sealed class GetProjectsQueryValidator : AbstractValidator<GetProjectsQ
             .GreaterThanOrEqualTo(Pagination.DefaultPageIndex);
 
         RuleFor(x => x.PageSize)
-            .GreaterThanOrEqualTo(Pagination.DefaultPageSize);
+            .GreaterThanOrEqualTo(6);
 
         RuleFor(x => x.Order)
             .IsInEnum();
