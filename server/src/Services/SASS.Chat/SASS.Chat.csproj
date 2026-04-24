@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\SASS.Chassis\SASS.Chassis.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks\SASS.Constants\SASS.Constants.csproj" />
     </ItemGroup>
 
 </Project>

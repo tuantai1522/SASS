@@ -6,5 +6,4 @@ public static class Components
     {
         public const string Chat = "chatdb";
     }
-
 }

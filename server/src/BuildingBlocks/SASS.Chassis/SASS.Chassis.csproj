@@ -31,7 +31,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\SASS.Constants\SASS.Constants.csproj" />
+      <ProjectReference Include="..\SASS.Constants\SASS.Constants.csproj" />
       <ProjectReference Include="..\SASS.SharedKernel\SASS.SharedKernel.csproj" />
     </ItemGroup>
 
