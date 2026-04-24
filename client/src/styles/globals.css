@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(14, 122, 104, 0.1),
+      transparent 28%
+    ),
+    radial-gradient(circle at right, rgba(162, 96, 22, 0.08), transparent 24%),
+    var(--color-bg);
+  color: var(--color-text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--color-heading);
+  }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent 85%);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.support-copy {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.content-card,
+.toolbar-card {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-md);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.toolbar-card,
+.content-card {
+  border-radius: 24px;
+  padding: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-strong);
+  color: var(--color-text);
+}
+
+.meta-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+}
+
+.theme-chip,
+.filter-chip,
+.ghost-button,
+.primary-button {
+  border: 0;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.theme-chip,
+.filter-chip {
+  padding: 0.6rem 0.95rem;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.theme-chip.is-active,
+.filter-chip.is-active {
+  background: var(--color-surface-strong);
+  color: var(--color-heading);
+  box-shadow: var(--shadow-sm);
+}
+
+.primary-button,
+.ghost-button,
+.compact-button {
+  border-radius: 999px;
+  padding: 0.9rem 1.2rem;
+  font-weight: 700;
+}
+
+.primary-button {
+  color: #f7fffc;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-accent-strong)
+  );
+  box-shadow: var(--shadow-sm);
+}
+
+.primary-button:hover,
+.ghost-button:hover,
+.filter-chip:hover,
+.theme-chip:hover {
+  transform: translateY(-1px);
+}
+
+.ghost-button {
+  color: var(--color-heading);
+  background: var(--color-neutral-soft);
+}
+
+.compact-button {
+  padding: 0.65rem 0.95rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge.tone-neutral {
+  background: var(--color-neutral-soft);
+  color: var(--color-heading);
+}
+
+.badge.tone-accent {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+.badge.tone-warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.badge.tone-danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.badge.tone-success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+@media (max-width: 720px) {
+  .page-title {
+    max-width: none;
+  }
+}
