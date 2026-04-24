@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -8,7 +9,7 @@ namespace SASS.Chassis.Security.TokenGeneration;
 
 internal sealed class TokenProvider(IConfiguration configuration) : ITokenProvider
 {
-    public string Create(Guid userId, string email)
+    public string CreateAccessToken(Guid userId, string email)
     {
         string secretKey = configuration["JwtOptions:Secret"]!;
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
@@ -33,5 +34,14 @@ internal sealed class TokenProvider(IConfiguration configuration) : ITokenProvid
         string token = handler.CreateToken(tokenDescriptor);
         
         return token;
+    }
+
+    public (string token, long expiredAt) CreateRefreshToken()
+    {
+        var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+
+        var expiredAt = DateTimeOffset.UtcNow.AddSeconds(configuration.GetValue<long>("JwtOptions:ExpiredRefreshToken")).ToUnixTimeMilliseconds();
+
+        return (token, expiredAt);
     }
 }

@@ -57,4 +57,11 @@ public sealed class User : Entity, IAggregateRoot
     {
         LocalCredential = localCredential;
     }
+    
+    public void RotateRefreshToken(Guid refreshTokenId, string token, long expiredAt)
+    {
+        var refreshToken = _refreshTokens.FirstOrDefault(currentToken => currentToken.Id == refreshTokenId);
+
+        refreshToken?.Rotate(token, expiredAt);
+    }
 }

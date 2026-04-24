@@ -13,6 +13,7 @@ internal sealed class AuthorizeGoogleCommandHandler(
     IHttpClientFactory httpClientFactory,
     IOptions<GoogleAuthOptions> options,
     ITokenProvider tokenProvider,
+    ICookieService cookieService,
     ChatDbContext dbContext) : IRequestHandler<AuthorizeGoogleCommand, AuthorizeGoogleResponse>
 {
     public async Task<AuthorizeGoogleResponse> Handle(AuthorizeGoogleCommand request, CancellationToken cancellationToken)
@@ -35,16 +36,26 @@ internal sealed class AuthorizeGoogleCommandHandler(
         var normalizedEmail = googleUser.Email.Trim().ToLowerInvariant();
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
 
+        // If user hasn't existed, create new user with email from Google profile
         if (user is null)
         {
             user = User.Create(normalizedEmail, null, googleUser.Name);
             await dbContext.Users.AddAsync(user, cancellationToken);
         }
-
+        
+        // 2. Create access token and return for user
+        string accessToken = tokenProvider.CreateAccessToken(user.Id, user.Email);
+        
+        // To store refresh token in database
+        var (refreshToken, expiredAt) = tokenProvider.CreateRefreshToken();
+        
+        user.AddRefreshToken(RefreshToken.Create(user.Id, refreshToken, expiredAt));
         await dbContext.SaveChangesAsync(cancellationToken);
+        
+        // 3. Set cookie of refreshToken in browser
+        cookieService.Set(Application.RefreshTokenCookieName, refreshToken, expiredAt);
 
-        return new AuthorizeGoogleResponse(tokenProvider.Create(user.Id, user.Email));
-
+        return new AuthorizeGoogleResponse(accessToken);
     }
 
     private static async Task<GoogleTokenResponse?> ExchangeCodeForTokenAsync(

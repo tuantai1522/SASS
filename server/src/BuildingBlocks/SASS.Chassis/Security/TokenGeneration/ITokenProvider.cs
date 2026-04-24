@@ -2,5 +2,6 @@
 
 public interface ITokenProvider
 {
-    string Create(Guid userId, string email);
+    string CreateAccessToken(Guid userId, string email);
+    (string token, long expiredAt) CreateRefreshToken();
 }

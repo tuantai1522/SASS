@@ -3,6 +3,7 @@ global using SASS.Chassis.Endpoints;
 global using SASS.Chassis.CQRS;
 global using SASS.Chassis.Exceptions;
 global using SASS.Chassis.Pagination;
+global using SASS.Chassis.WebStorages;
 global using SASS.Chassis.Cors;
 global using SASS.SharedKernel.SeedWork;
 global using SASS.SharedKernel.Helpers;

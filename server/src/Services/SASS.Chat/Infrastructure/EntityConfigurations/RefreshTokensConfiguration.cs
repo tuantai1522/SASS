@@ -10,7 +10,7 @@ public sealed class RefreshTokensConfiguration : IEntityTypeConfiguration<Refres
         builder.ToTable("refresh_tokens");
 
         builder.HasKey(x => x.Id);
-        builder.Property(p => p.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
+        builder.Property(c => c.Id).ValueGeneratedNever();
 
         builder.Property(x => x.Token)
             .HasMaxLength(512)
