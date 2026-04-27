@@ -61,7 +61,7 @@ internal sealed class PaginationHeaderFilter : IEndpointFilter
 
         return new(
             Convert.ToInt32(
-                type.GetProperty(nameof(PagedResult<>.PageIndex))?.GetValue(pagedResult)
+                type.GetProperty(nameof(PagedResult<>.Page))?.GetValue(pagedResult)
             ),
             Convert.ToInt32(
                 type.GetProperty(nameof(PagedResult<>.PageSize))?.GetValue(pagedResult)

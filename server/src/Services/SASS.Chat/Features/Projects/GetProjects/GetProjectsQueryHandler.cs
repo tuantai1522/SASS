@@ -9,9 +9,9 @@ namespace SASS.Chat.Features.Projects.GetProjects;
 internal sealed class GetProjectsQueryHandler(
     ChatDbContext dbContext,
     IUserProvider userProvider)
-    : IRequestHandler<GetProjectsQuery, GetProjectsResponse>
+    : IRequestHandler<GetProjectsQuery, PagedResult<GetProjectsItemResponse>>
 {
-    public async Task<GetProjectsResponse> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<GetProjectsItemResponse>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
         var page = request.Page;
         var pageSize = request.PageSize;
@@ -42,31 +42,16 @@ internal sealed class GetProjectsQueryHandler(
         var items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new GetProjectsItemResponse
-            {
-                Id = x.Id,
-                Code = x.Code,
-                Title = x.Title,
-                Description = x.Description,
-                CreatedAt = x.CreatedAt,
-                Role = x.Members.Where(m => m.UserId == userId)
-                        .Select(m => m.Role.ToString())
-                        .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
-                Progress = ProjectProgressCalculator.Calculate(x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)), x.Tasks.Count(t => !t.IsDeleted))
-            })
+            .Select(x => new GetProjectsItemResponse(x.Id, x.Code, x.Title, x.Description, x.CreatedAt,
+                x.Members
+                    .Where(m => m.UserId == userId)
+                    .Select(m => m.Role.ToString())
+                    .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
+                ProjectProgressCalculator.Calculate(
+                    x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)),
+                    x.Tasks.Count(t => !t.IsDeleted))))
             .ToListAsync(cancellationToken);
 
-        var totalPages = (long)Math.Ceiling((double)totalItems / pageSize);
-
-        return new GetProjectsResponse
-        {
-            Items = items,
-            PageIndex = page,
-            PageSize = pageSize,
-            TotalItems = totalItems,
-            TotalPages = totalPages,
-            HasPreviousPage = page > 1,
-            HasNextPage = page < totalPages
-        };
+        return new PagedResult<GetProjectsItemResponse>(items, request.Page, request.PageSize, totalItems);
     }
 }

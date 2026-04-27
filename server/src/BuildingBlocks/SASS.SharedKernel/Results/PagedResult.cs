@@ -1,21 +1,27 @@
 ﻿namespace SASS.SharedKernel.Results;
 
-public sealed class PagedResult<T> : List<T>
+public sealed class PagedResult<T>
 {
-    public PagedResult(IReadOnlyList<T> items, int pageIndex, int pageSize, long totalItems)
+    public PagedResult(IReadOnlyList<T> items, int page, int pageSize, long totalItems)
     {
-        PageIndex = pageIndex;
+        Items = items;
+        Page = page;
         PageSize = pageSize;
         TotalItems = totalItems;
         TotalPages = (long)Math.Ceiling((double)TotalItems / PageSize);
-
-        AddRange(items);
     }
 
-    public int PageIndex { get; }
+    public IReadOnlyList<T> Items { get; }
+
+    public int Page { get; }
+
     public int PageSize { get; }
+
     public long TotalItems { get; }
+
     public long TotalPages { get; }
-    public bool HasPreviousPage => PageIndex > 1;
-    public bool HasNextPage => PageIndex < TotalPages;
+
+    public bool HasPreviousPage => Page > 1;
+
+    public bool HasNextPage => Page < TotalPages;
 }

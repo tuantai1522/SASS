@@ -19,21 +19,17 @@ internal sealed class GetProjectByIdQueryHandler(
         var response = await dbContext.Projects
             .AsNoTracking()
             .Where(x => x.Id == request.ProjectId && x.Members.Any(m => m.UserId == userId))
-            .Select(x => new GetProjectByIdResponse
-            {
-                Id = x.Id,
-                Code = x.Code,
-                Title = x.Title,
-                Description = x.Description,
-                CreatedAt = x.CreatedAt,
-                OwnerId = x.OwnerId,
-                Role = x.Members
-                    .Where(m => m.UserId == userId)
-                    .Select(m => m.Role.ToString())
-                    .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
-                Progress = ProjectProgressCalculator.Calculate(x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)), x.Tasks.Count(t => !t.IsDeleted))
-            })
-            .FirstOrDefaultAsync(cancellationToken);
+            .Select(x => new GetProjectByIdResponse(x.Id, x.Code, x.Title, x.Description, x.CreatedAt,
+                    x.Members
+                        .Where(m => m.UserId == userId)
+                        .Select(m => m.Role.ToString())
+                        .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
+                    ProjectProgressCalculator.Calculate(
+                        x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)),
+                        x.Tasks.Count(t => !t.IsDeleted)),
+                    x.Tasks.Count(t => !t.IsDeleted),
+                    x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done))))
+                .FirstOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(response, request.ProjectId);
 
