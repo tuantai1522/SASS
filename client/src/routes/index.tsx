@@ -1,6 +1,6 @@
 import { Navigate, createFileRoute } from '@tanstack/react-router'
 import { useAuth } from '#/features/auth'
-import { defaultProjectListSearch } from '#/features/projects'
+import { defaultProjectsSearch } from '#/features/projects'
 
 export const Route = createFileRoute('/')({
   component: IndexRedirect,
@@ -14,7 +14,7 @@ function IndexRedirect() {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/projects" search={defaultProjectListSearch} />
+    return <Navigate to="/projects" search={defaultProjectsSearch} />
   }
 
   return <Navigate to="/sign-in" />

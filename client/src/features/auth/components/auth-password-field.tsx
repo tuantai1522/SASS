@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import type { InputHTMLAttributes } from 'react'
-import { cn } from '#/shared/lib/cn'
+import { cn } from '#/shared/lib'
 
 type AuthPasswordFieldProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,

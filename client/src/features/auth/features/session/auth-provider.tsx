@@ -8,7 +8,7 @@ import {
   setAuthenticatedAccessToken,
   subscribeToAuthStore,
 } from './auth-store'
-import { renewAccessToken } from './api'
+import { ensureAuthReady } from './bootstrap-auth'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const authState = useSyncExternalStore(
@@ -16,32 +16,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getAuthStoreState,
   )
 
+  // I want to know current user state in application
   useEffect(() => {
-    let isMounted = true
-
-    async function bootstrapAuth() {
-      try {
-        const accessToken = await renewAccessToken()
-
-        if (!isMounted) {
-          return
-        }
-
-        setAuthenticatedAccessToken(accessToken)
-      } catch {
-        if (!isMounted) {
-          return
-        }
-
-        clearAuthStore()
-      }
-    }
-
-    void bootstrapAuth()
-
-    return () => {
-      isMounted = false
-    }
+    void ensureAuthReady()
   }, [])
 
   const value = useMemo<AuthContextValue>(

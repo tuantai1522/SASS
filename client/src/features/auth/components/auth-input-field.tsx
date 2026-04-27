@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import type { InputHTMLAttributes } from 'react'
-import { cn } from '#/shared/lib/cn'
+import { cn } from '#/shared/lib'
 
 type AuthInputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string

@@ -1,5 +1,5 @@
+import { defaultProjectsSearch } from '#/features/projects'
 import { useAuth } from '#/features/auth'
-import { defaultProjectListSearch } from '#/features/projects'
 import { Navigate, Outlet, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public')({
@@ -14,7 +14,7 @@ function PublicRoute() {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/projects" search={defaultProjectListSearch} />
+    return <Navigate to="/projects" search={defaultProjectsSearch} />
   }
 
   return <Outlet />

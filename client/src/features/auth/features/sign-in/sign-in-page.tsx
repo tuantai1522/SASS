@@ -1,6 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
-import { defaultProjectListSearch } from '#/features/projects'
 import { ThemeToggle } from '#/features/theme'
 import { Badge, Button } from '#/shared/ui'
 import type { SignInFormValues } from './types'
@@ -26,8 +25,8 @@ export function SignInPage() {
     reset()
 
     login(values, {
-      onSuccess: () => {
-        navigate({ to: '/projects', search: defaultProjectListSearch })
+      onSuccess: async () => {
+        await navigate({ to: '/' })
       },
     })
   })
