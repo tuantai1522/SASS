@@ -32,7 +32,7 @@ export function AppShell() {
         </div>
       </aside>
 
-      <div className="grid gap-4">
+      <div className="flex flex-col gap-8">
         <Topbar />
 
         <main className="min-h-0">
