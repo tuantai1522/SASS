@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '#/shared/lib/cn'
+import { cn } from '#/shared/lib'
 import { Button } from '#/shared/ui/button'
 import { Card } from '#/shared/ui/card'
 

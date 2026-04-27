@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react'
-import { cn } from '#/shared/lib/cn'
+import { cn } from '#/shared/lib'
+import { Badge } from './badge'
 
 type SectionHeaderProps = {
   eyebrow?: string
   title: string
+  code: string
   description: ReactNode
   actions?: ReactNode
   className?: string
@@ -12,6 +14,7 @@ type SectionHeaderProps = {
 export function SectionHeader({
   eyebrow,
   title,
+  code,
   description,
   actions,
   className,
@@ -19,16 +22,30 @@ export function SectionHeader({
   return (
     <div
       className={cn(
-        'grid gap-4 lg:flex lg:items-start lg:justify-between',
+        'grid gap-6 lg:flex lg:items-center lg:justify-between',
         className,
       )}
     >
-      <div>
+      <div className="max-w-2xl">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h2 className="page-title">{title}</h2>
-        <p className="support-copy">{description}</p>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="page-title">{title}</h2>
+          <Badge tone="accent" className="font-mono tracking-wide">
+            {code}
+          </Badge>
+        </div>
+
+        {description ? (
+          <p className="support-copy mt-2">{description}</p>
+        ) : null}
       </div>
-      {actions ? <div>{actions}</div> : null}
+
+      {actions ? (
+        <div className="flex shrink-0 items-start lg:justify-center lg:items-center">
+          {actions}
+        </div>
+      ) : null}
     </div>
   )
 }

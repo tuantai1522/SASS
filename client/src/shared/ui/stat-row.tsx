@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Card } from '#/shared/ui/card'
-import { cn } from '#/shared/lib/cn'
+import { cn } from '#/shared/lib'
 
 type StatItem = {
   label: string

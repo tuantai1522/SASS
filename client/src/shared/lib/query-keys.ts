@@ -1,4 +1,4 @@
-import type { ProjectListSearch } from '#/features/projects/types'
+import type { GetProjectsRequest } from '#/features/projects'
 
 export const queryKeys = {
   auth: {
@@ -7,7 +7,7 @@ export const queryKeys = {
   },
   projects: {
     all: ['projects'] as const,
-    list: (search: ProjectListSearch) => ['projects', 'list', search] as const,
+    list: (params: GetProjectsRequest) => ['projects', 'list', params] as const,
     detail: (projectId: string) => ['projects', 'detail', projectId] as const,
   },
   tasks: {
