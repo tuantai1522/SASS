@@ -1,6 +1,6 @@
 namespace SASS.Chat.Features.Projects.GetProjects;
 
-public sealed class GetProjectsItemResponse(
+public sealed record GetProjectsItemResponse(
     Guid Id,
     string Code,
     string Title,
