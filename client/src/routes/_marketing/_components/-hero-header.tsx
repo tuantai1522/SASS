@@ -92,9 +92,8 @@ export const HeroHeader = () => {
                   size="sm"
                   className={cn(isScrolled && "lg:hidden")}
                 >
-                  {/*Todo: To check this link*/}
-                  <Link to="/">
-                    <span>Login</span>
+                  <Link to="/sign-in">
+                    <span>Sign in</span>
                   </Link>
                 </Button>
                 <Button
@@ -113,8 +112,7 @@ export const HeroHeader = () => {
                   size="sm"
                   className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
                 >
-                  {/*Todo: To check this link*/}
-                  <Link to="/">
+                  <Link to="/sign-in">
                     <span>Get Started</span>
                   </Link>
                 </Button>
