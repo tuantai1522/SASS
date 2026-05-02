@@ -1,7 +1,9 @@
-﻿type AxiosRequestConfig = import("axios").AxiosRequestConfig;
+﻿import { env } from "@/config/env.ts";
+
+type AxiosRequestConfig = import("axios").AxiosRequestConfig;
 
 const getBaseURL = (): string => {
-  return "http://localhost:5176";
+  return env.baseApiUrl;
 };
 
 const defaultConfig: AxiosRequestConfig = {
