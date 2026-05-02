@@ -1,8 +1,7 @@
 ﻿import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
-import { env } from "@/config/env.ts";
-
-import { useAuthStore } from "@/stores/auths/auth-store.ts";
-import { renewAccessToken } from "@/api/auths/auth.ts";
+import { renewAccessToken } from "@/features/auths/renew-access-token/api.ts";
+import { useAuthStore } from "@/features/auths/manage-token/auth-store.ts";
+import { env } from "../env.ts";
 
 const API_URL = env.baseApiUrl;
 

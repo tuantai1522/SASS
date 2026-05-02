@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import HeroSection from "@/routes/_marketing/_components/-hero-section.tsx";
+import { HeroSection } from "@/features/marketings/components";
 
 export const Route = createFileRoute("/_marketing/")({
   component: MarketingIndex,

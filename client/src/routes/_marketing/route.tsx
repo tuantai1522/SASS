@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { HeroHeader } from "@/routes/_marketing/_components/-hero-header.tsx";
+import { HeroHeader } from "@/features/marketings/components";
 
 export const Route = createFileRoute("/_marketing")({
   component: MarketingLayout,
