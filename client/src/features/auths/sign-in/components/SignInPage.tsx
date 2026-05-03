@@ -10,8 +10,14 @@ import {
   Input,
 } from "@/features/shared";
 import { type SignInFormValues, signInSchema } from "../validators.ts";
+import { signInOptions } from "../sign-in-options.ts";
+import { useMutation } from "@tanstack/react-query";
+import { useAuthStore } from "@/features/auths/manage-token";
+import { normalizeApiError } from "@/lib/normalize-api-error.ts";
+import { toast } from "sonner";
 
 export function SignInPage() {
+  const { setAuth } = useAuthStore();
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -20,11 +26,22 @@ export function SignInPage() {
     },
   });
 
-  function onSubmit(values: SignInFormValues) {
-    console.log(values);
+  const signInMutation = useMutation({
+    ...signInOptions(),
+    onSuccess: (response) => {
+      setAuth(response.token);
 
-    // TODO: call API login ở đây
-    // await login(values)
+      // navigate("/dashboard")
+      // toast.success("Signed in successfully")
+    },
+    onError: (error) => {
+      const normalizedError = normalizeApiError(error);
+      toast.error(normalizedError.detail, { position: "bottom-right" });
+    },
+  });
+
+  function onSubmit(values: SignInFormValues) {
+    signInMutation.mutate(values);
   }
 
   return (
