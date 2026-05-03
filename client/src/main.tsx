@@ -4,6 +4,7 @@ import {
   AppRouterProvider,
   AuthProvider,
   ThemeProvider,
+  Toaster,
 } from "@/features/shared";
 
 createRoot(document.getElementById("root")!).render(
@@ -12,6 +13,7 @@ createRoot(document.getElementById("root")!).render(
       {/*AuthProvider runs first to provide status for AppRouterProvider*/}
       <AuthProvider>
         <AppRouterProvider />
+        <Toaster />
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,

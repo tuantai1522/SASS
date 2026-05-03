@@ -7,17 +7,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   status: "loading",
   hasBootstrapped: false,
 
-  setAuth: ({ accessToken }) =>
+  setAuth: (accessToken: string) =>
     set({
       accessToken,
       status: "authenticated",
       hasBootstrapped: true,
-    }),
-
-  setAccessToken: (accessToken) =>
-    set({
-      accessToken,
-      status: "authenticated",
     }),
 
   clearAuth: () =>

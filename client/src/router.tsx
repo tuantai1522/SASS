@@ -1,6 +1,8 @@
 ﻿import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routeTree } from "@/routeTree.gen.ts";
-import type { AuthStatus } from "@/stores/auths/auth-store.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { AuthStatus } from "@/features/auths/manage-token";
+import { Suspense } from "react";
 
 export type AuthContext = {
   status: AuthStatus;
@@ -8,10 +10,22 @@ export type AuthContext = {
 
 export type RouterContext = {
   auth: AuthContext;
-
-  // Todo: To add later
-  // queryClient: QueryClient
+  queryClient: QueryClient;
 };
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60,
+      gcTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+    mutations: {
+      retry: 0,
+    },
+  },
+});
 
 export function createRouter() {
   const router = createTanStackRouter({
@@ -20,16 +34,16 @@ export function createRouter() {
       auth: {
         status: "loading",
       },
+      queryClient,
     } satisfies RouterContext,
-    // Wrap: function WrapComponent({ children }) {
-    //   return (
-    //     // Every component in routes can use React Query
-    //     <QueryClientProvider client={queryClient}>
-    //       {/* Todo: To add Spinner Suspense */}
-    //       <Suspense fallback={<p>Loading....</p>}>{children}</Suspense>
-    //   </QueryClientProvider>
-    // )
-    // },
+    Wrap: function WrapComponent({ children }) {
+      return (
+        // Every component in routes can use React Query
+        <QueryClientProvider client={queryClient}>
+          <Suspense fallback={<p>Loading....</p>}>{children}</Suspense>
+        </QueryClientProvider>
+      );
+    },
   });
 
   return router;

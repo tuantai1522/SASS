@@ -1,7 +1,13 @@
-﻿import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { renewAccessToken } from "@/features/auths/renew-access-token/api.ts";
 import { useAuthStore } from "@/features/auths/manage-token/auth-store.ts";
 import { env } from "../env.ts";
+
+declare module "axios" {
+  interface AxiosRequestConfig {
+    skipAuthRefresh?: boolean;
+  }
+}
 
 const API_URL = env.baseApiUrl;
 
@@ -44,7 +50,11 @@ apiClient.interceptors.response.use(
 
     const isUnauthorized = error.response?.status === 401;
 
-    if (!isUnauthorized || originalRequest._retry) {
+    if (
+      !isUnauthorized ||
+      originalRequest._retry ||
+      originalRequest.skipAuthRefresh
+    ) {
       return Promise.reject(error);
     }
 
@@ -69,9 +79,7 @@ apiClient.interceptors.response.use(
     try {
       const data = await renewAccessToken();
 
-      useAuthStore.getState().setAuth({
-        accessToken: data.token,
-      });
+      useAuthStore.getState().setAuth(data.token);
 
       resolveRefreshQueue(data.token);
 
