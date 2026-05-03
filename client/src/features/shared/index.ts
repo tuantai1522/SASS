@@ -13,6 +13,7 @@ export * from "./components/ui/Label";
 export * from "./components/ui/Separator";
 export * from "./components/ui/Textarea";
 export * from "./components/ui/ThemeToggle";
+export * from "./components/ui/Toaster";
 
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
