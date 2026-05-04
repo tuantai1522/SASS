@@ -10,11 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
+import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
+import { Route as DashboardProjectsIndexRouteImport } from './routes/_dashboard/projects/index'
+import { Route as DashboardChatsIndexRouteImport } from './routes/_dashboard/chats/index'
+import { Route as DashboardProjectsProjectIdIndexRouteImport } from './routes/_dashboard/projects/$projectId/index'
+import { Route as DashboardChatsChatIdIndexRouteImport } from './routes/_dashboard/chats/$chatId/index'
 
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/_dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
@@ -27,30 +36,87 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardProjectsIndexRoute = DashboardProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardChatsIndexRoute = DashboardChatsIndexRouteImport.update({
+  id: '/chats/',
+  path: '/chats/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardProjectsProjectIdIndexRoute =
+  DashboardProjectsProjectIdIndexRouteImport.update({
+    id: '/projects/$projectId/',
+    path: '/projects/$projectId/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardChatsChatIdIndexRoute =
+  DashboardChatsChatIdIndexRouteImport.update({
+    id: '/chats/$chatId/',
+    path: '/chats/$chatId/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/sign-in': typeof AuthSignInRoute
+  '/chats/': typeof DashboardChatsIndexRoute
+  '/projects/': typeof DashboardProjectsIndexRoute
+  '/chats/$chatId/': typeof DashboardChatsChatIdIndexRoute
+  '/projects/$projectId/': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/sign-in': typeof AuthSignInRoute
   '/': typeof MarketingIndexRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/chats': typeof DashboardChatsIndexRoute
+  '/projects': typeof DashboardProjectsIndexRoute
+  '/chats/$chatId': typeof DashboardChatsChatIdIndexRoute
+  '/projects/$projectId': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_marketing/': typeof MarketingIndexRoute
+  '/_dashboard/chats/': typeof DashboardChatsIndexRoute
+  '/_dashboard/projects/': typeof DashboardProjectsIndexRoute
+  '/_dashboard/chats/$chatId/': typeof DashboardChatsChatIdIndexRoute
+  '/_dashboard/projects/$projectId/': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-in'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/chats/'
+    | '/projects/'
+    | '/chats/$chatId/'
+    | '/projects/$projectId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/sign-in' | '/'
-  id: '__root__' | '/_marketing' | '/_auth/sign-in' | '/_marketing/'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/chats'
+    | '/projects'
+    | '/chats/$chatId'
+    | '/projects/$projectId'
+  id:
+    | '__root__'
+    | '/_dashboard'
+    | '/_marketing'
+    | '/_auth/sign-in'
+    | '/_marketing/'
+    | '/_dashboard/chats/'
+    | '/_dashboard/projects/'
+    | '/_dashboard/chats/$chatId/'
+    | '/_dashboard/projects/$projectId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
   AuthSignInRoute: typeof AuthSignInRoute
 }
@@ -62,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof MarketingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard': {
+      id: '/_dashboard'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_marketing/': {
@@ -78,8 +151,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dashboard/projects/': {
+      id: '/_dashboard/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof DashboardProjectsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/chats/': {
+      id: '/_dashboard/chats/'
+      path: '/chats'
+      fullPath: '/chats/'
+      preLoaderRoute: typeof DashboardChatsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/projects/$projectId/': {
+      id: '/_dashboard/projects/$projectId/'
+      path: '/projects/$projectId'
+      fullPath: '/projects/$projectId/'
+      preLoaderRoute: typeof DashboardProjectsProjectIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/_dashboard/chats/$chatId/': {
+      id: '/_dashboard/chats/$chatId/'
+      path: '/chats/$chatId'
+      fullPath: '/chats/$chatId/'
+      preLoaderRoute: typeof DashboardChatsChatIdIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
+
+interface DashboardRouteRouteChildren {
+  DashboardChatsIndexRoute: typeof DashboardChatsIndexRoute
+  DashboardProjectsIndexRoute: typeof DashboardProjectsIndexRoute
+  DashboardChatsChatIdIndexRoute: typeof DashboardChatsChatIdIndexRoute
+  DashboardProjectsProjectIdIndexRoute: typeof DashboardProjectsProjectIdIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardChatsIndexRoute: DashboardChatsIndexRoute,
+  DashboardProjectsIndexRoute: DashboardProjectsIndexRoute,
+  DashboardChatsChatIdIndexRoute: DashboardChatsChatIdIndexRoute,
+  DashboardProjectsProjectIdIndexRoute: DashboardProjectsProjectIdIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
 
 interface MarketingRouteRouteChildren {
   MarketingIndexRoute: typeof MarketingIndexRoute
@@ -94,6 +213,7 @@ const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   MarketingRouteRoute: MarketingRouteRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,
 }
