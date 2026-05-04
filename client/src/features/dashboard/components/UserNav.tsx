@@ -13,6 +13,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getMeOptions } from "@/features/auths/get-me";
 import { SignOutButton } from "@/features/auths/sign-out";
+import { ThemeToggleSidebar } from "@/features/dashboard/components/ThemeToogleSidebar.tsx";
 
 export function UserNav() {
   const { data: me } = useSuspenseQuery(getMeOptions());
@@ -55,6 +56,7 @@ export function UserNav() {
             <p className="text-muted-foreground truncate text-xs">{me.email}</p>
           </div>
         </DropdownMenuLabel>
+        <ThemeToggleSidebar />
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <SignOutButton />
