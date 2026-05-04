@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button, ThemeToggle } from "@/features/shared";
+import { useAuthStore } from "@/features/auths/manage-token";
 
 const menuItems = [
   { name: "Features", href: "#link" },
@@ -14,6 +15,7 @@ const menuItems = [
 export function HeroHeader() {
   const [menuState, setMenuState] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { status } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,36 +86,72 @@ export function HeroHeader() {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link to="/sign-in">
-                    <span>Sign in</span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  {/*Todo: To check this link*/}
-                  <Link to="/">
-                    <span>Sign Up</span>
-                  </Link>
-                </Button>
+                {status === "authenticated" ? (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className={cn(isScrolled && "lg:hidden")}
+                    >
+                      <Link to="/chats">
+                        <span>Dashboard</span>
+                      </Link>
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className={cn(isScrolled && "lg:hidden")}
+                    >
+                      <Link to="/sign-in">
+                        <span>Sign in</span>
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="sm"
+                      className={cn(isScrolled && "lg:hidden")}
+                    >
+                      {/*Todo: To add link sign-up*/}
+                      <Link to="/">
+                        <span>Sign Up</span>
+                      </Link>
+                    </Button>
+                  </>
+                )}
+
                 <ThemeToggle />
-                <Button
-                  asChild
-                  size="sm"
-                  className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
-                >
-                  <Link to="/sign-in">
-                    <span>Get Started</span>
-                  </Link>
-                </Button>
+
+                {status === "authenticated" ? (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                    >
+                      <Link to="/chats">
+                        <span>Dashboard</span>
+                      </Link>
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      size="sm"
+                      className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                    >
+                      <Link to="/sign-in">
+                        <span>Get Started</span>
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
