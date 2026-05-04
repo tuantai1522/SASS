@@ -16,7 +16,7 @@ export function SignOutButton() {
   // This effect will listen to the auth status to change, if the user is already logged out, it will redirect to the "/" page
   useEffect(() => {
     if (status === "unauthenticated") {
-      void navigate({ to: "/" });
+      void navigate({ to: "/sign-in" });
     }
   }, [status, navigate]);
 

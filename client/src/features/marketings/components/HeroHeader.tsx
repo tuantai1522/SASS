@@ -94,7 +94,7 @@ export function HeroHeader() {
                       size="sm"
                       className={cn(isScrolled && "lg:hidden")}
                     >
-                      <Link to="/chats">
+                      <Link to="/conversations">
                         <span>Dashboard</span>
                       </Link>
                     </Button>
@@ -134,7 +134,7 @@ export function HeroHeader() {
                       size="sm"
                       className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
                     >
-                      <Link to="/chats">
+                      <Link to="/conversations">
                         <span>Dashboard</span>
                       </Link>
                     </Button>

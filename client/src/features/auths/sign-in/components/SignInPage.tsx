@@ -34,11 +34,11 @@ export function SignInPage() {
   // This effect will listen to the auth status to change, if the user is already authenticated, it will redirect to the chats page
   useEffect(() => {
     if (status === "authenticated") {
-      void navigate({ to: "/chats" });
+      void navigate({ to: "/conversations" });
     }
   }, [status, navigate]);
 
-  const signInMutation = useMutation({
+  const { mutate, isPending } = useMutation({
     ...signInOptions(),
     onSuccess: async (response) => {
       setAuth(response.token);
@@ -50,7 +50,7 @@ export function SignInPage() {
   });
 
   function onSubmit(values: SignInFormValues) {
-    signInMutation.mutate(values);
+    mutate(values);
   }
 
   return (
@@ -141,7 +141,7 @@ export function SignInPage() {
               className="w-full"
               disabled={form.formState.isSubmitting}
             >
-              {signInMutation.isPending ? <Spinner /> : "Sign in"}
+              {isPending ? <Spinner /> : "Sign in"}
             </Button>
           </div>
 

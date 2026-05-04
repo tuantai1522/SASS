@@ -9,8 +9,8 @@ import {
 
 const menuItems = [
   {
-    label: "Chats",
-    to: "/chats",
+    label: "Conversations",
+    to: "/conversations",
     icon: MessageCircle,
   },
   {

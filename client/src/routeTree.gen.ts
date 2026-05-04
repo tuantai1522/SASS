@@ -13,10 +13,10 @@ import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
+import { Route as DashboardConversationsRouteRouteImport } from './routes/_dashboard/conversations/route'
 import { Route as DashboardProjectsIndexRouteImport } from './routes/_dashboard/projects/index'
-import { Route as DashboardChatsIndexRouteImport } from './routes/_dashboard/chats/index'
 import { Route as DashboardProjectsProjectIdIndexRouteImport } from './routes/_dashboard/projects/$projectId/index'
-import { Route as DashboardChatsChatIdIndexRouteImport } from './routes/_dashboard/chats/$chatId/index'
+import { Route as DashboardConversationsConversationIdIndexRouteImport } from './routes/_dashboard/conversations/$conversationId/index'
 
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
@@ -36,14 +36,15 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardConversationsRouteRoute =
+  DashboardConversationsRouteRouteImport.update({
+    id: '/conversations',
+    path: '/conversations',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardProjectsIndexRoute = DashboardProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardChatsIndexRoute = DashboardChatsIndexRouteImport.update({
-  id: '/chats/',
-  path: '/chats/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardProjectsProjectIdIndexRoute =
@@ -52,66 +53,66 @@ const DashboardProjectsProjectIdIndexRoute =
     path: '/projects/$projectId/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
-const DashboardChatsChatIdIndexRoute =
-  DashboardChatsChatIdIndexRouteImport.update({
-    id: '/chats/$chatId/',
-    path: '/chats/$chatId/',
-    getParentRoute: () => DashboardRouteRoute,
+const DashboardConversationsConversationIdIndexRoute =
+  DashboardConversationsConversationIdIndexRouteImport.update({
+    id: '/$conversationId/',
+    path: '/$conversationId/',
+    getParentRoute: () => DashboardConversationsRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
+  '/conversations': typeof DashboardConversationsRouteRouteWithChildren
   '/sign-in': typeof AuthSignInRoute
-  '/chats/': typeof DashboardChatsIndexRoute
   '/projects/': typeof DashboardProjectsIndexRoute
-  '/chats/$chatId/': typeof DashboardChatsChatIdIndexRoute
+  '/conversations/$conversationId/': typeof DashboardConversationsConversationIdIndexRoute
   '/projects/$projectId/': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
+  '/conversations': typeof DashboardConversationsRouteRouteWithChildren
   '/sign-in': typeof AuthSignInRoute
-  '/chats': typeof DashboardChatsIndexRoute
   '/projects': typeof DashboardProjectsIndexRoute
-  '/chats/$chatId': typeof DashboardChatsChatIdIndexRoute
+  '/conversations/$conversationId': typeof DashboardConversationsConversationIdIndexRoute
   '/projects/$projectId': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/_dashboard/conversations': typeof DashboardConversationsRouteRouteWithChildren
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_marketing/': typeof MarketingIndexRoute
-  '/_dashboard/chats/': typeof DashboardChatsIndexRoute
   '/_dashboard/projects/': typeof DashboardProjectsIndexRoute
-  '/_dashboard/chats/$chatId/': typeof DashboardChatsChatIdIndexRoute
+  '/_dashboard/conversations/$conversationId/': typeof DashboardConversationsConversationIdIndexRoute
   '/_dashboard/projects/$projectId/': typeof DashboardProjectsProjectIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/conversations'
     | '/sign-in'
-    | '/chats/'
     | '/projects/'
-    | '/chats/$chatId/'
+    | '/conversations/$conversationId/'
     | '/projects/$projectId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/conversations'
     | '/sign-in'
-    | '/chats'
     | '/projects'
-    | '/chats/$chatId'
+    | '/conversations/$conversationId'
     | '/projects/$projectId'
   id:
     | '__root__'
     | '/_dashboard'
     | '/_marketing'
+    | '/_dashboard/conversations'
     | '/_auth/sign-in'
     | '/_marketing/'
-    | '/_dashboard/chats/'
     | '/_dashboard/projects/'
-    | '/_dashboard/chats/$chatId/'
+    | '/_dashboard/conversations/$conversationId/'
     | '/_dashboard/projects/$projectId/'
   fileRoutesById: FileRoutesById
 }
@@ -151,18 +152,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dashboard/conversations': {
+      id: '/_dashboard/conversations'
+      path: '/conversations'
+      fullPath: '/conversations'
+      preLoaderRoute: typeof DashboardConversationsRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/projects/': {
       id: '/_dashboard/projects/'
       path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof DashboardProjectsIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/_dashboard/chats/': {
-      id: '/_dashboard/chats/'
-      path: '/chats'
-      fullPath: '/chats/'
-      preLoaderRoute: typeof DashboardChatsIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/_dashboard/projects/$projectId/': {
@@ -172,27 +173,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardProjectsProjectIdIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/_dashboard/chats/$chatId/': {
-      id: '/_dashboard/chats/$chatId/'
-      path: '/chats/$chatId'
-      fullPath: '/chats/$chatId/'
-      preLoaderRoute: typeof DashboardChatsChatIdIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+    '/_dashboard/conversations/$conversationId/': {
+      id: '/_dashboard/conversations/$conversationId/'
+      path: '/$conversationId'
+      fullPath: '/conversations/$conversationId/'
+      preLoaderRoute: typeof DashboardConversationsConversationIdIndexRouteImport
+      parentRoute: typeof DashboardConversationsRouteRoute
     }
   }
 }
 
+interface DashboardConversationsRouteRouteChildren {
+  DashboardConversationsConversationIdIndexRoute: typeof DashboardConversationsConversationIdIndexRoute
+}
+
+const DashboardConversationsRouteRouteChildren: DashboardConversationsRouteRouteChildren =
+  {
+    DashboardConversationsConversationIdIndexRoute:
+      DashboardConversationsConversationIdIndexRoute,
+  }
+
+const DashboardConversationsRouteRouteWithChildren =
+  DashboardConversationsRouteRoute._addFileChildren(
+    DashboardConversationsRouteRouteChildren,
+  )
+
 interface DashboardRouteRouteChildren {
-  DashboardChatsIndexRoute: typeof DashboardChatsIndexRoute
+  DashboardConversationsRouteRoute: typeof DashboardConversationsRouteRouteWithChildren
   DashboardProjectsIndexRoute: typeof DashboardProjectsIndexRoute
-  DashboardChatsChatIdIndexRoute: typeof DashboardChatsChatIdIndexRoute
   DashboardProjectsProjectIdIndexRoute: typeof DashboardProjectsProjectIdIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardChatsIndexRoute: DashboardChatsIndexRoute,
+  DashboardConversationsRouteRoute:
+    DashboardConversationsRouteRouteWithChildren,
   DashboardProjectsIndexRoute: DashboardProjectsIndexRoute,
-  DashboardChatsChatIdIndexRoute: DashboardChatsChatIdIndexRoute,
   DashboardProjectsProjectIdIndexRoute: DashboardProjectsProjectIdIndexRoute,
 }
 

@@ -23,7 +23,7 @@ function RouteComponent() {
           <UserNav />
         </aside>
 
-        <main className="p-6">
+        <main>
           <Outlet />
         </main>
       </div>
