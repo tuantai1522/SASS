@@ -10,7 +10,7 @@ public sealed class CreateConversationEndpoint : IEndpoint<Ok<IdResult>, CreateC
         app.MapPost("conversations", HandleAsync)
             .WithTags(nameof(Conversation))
             .WithName(nameof(CreateConversationEndpoint))
-            .WithDescription("Create conversation with default name")
+            .WithDescription("Create conversation")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization()
             .Produces<IdResult>(StatusCodes.Status201Created);

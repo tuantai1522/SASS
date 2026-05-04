@@ -20,7 +20,7 @@ internal sealed class CreateProjectCommandHandler(
 
         if (hasDuplicateCode)
         {
-            throw new InvalidOperationException("Project code already exists for current owner.");
+            throw new ConflictException("Project code already exists for current owner.");
         }
 
         var memberIds = request.MemberIds;
