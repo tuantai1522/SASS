@@ -15,6 +15,8 @@ export * from "./components/ui/Textarea";
 export * from "./components/ui/ThemeToggle";
 export * from "./components/ui/Toaster";
 export * from "./components/ui/Spinner";
+export * from "./components/ui/Sidebar";
+export * from "./components/ui/Tooltip";
 
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
