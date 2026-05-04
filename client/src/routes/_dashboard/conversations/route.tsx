@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { CreateConversation } from "@/features/dashboard/conversations/create-conversation";
+import { CreateConversationButton } from "@/features/dashboard/conversations/create-conversation";
 import LogoIcon from "@/assets/logo.png";
 
 export const Route = createFileRoute("/_dashboard/conversations")({
@@ -19,7 +19,7 @@ function ConversationsPage() {
 
         {/*Body*/}
         <div className="px-4 py-2">
-          <CreateConversation />
+          <CreateConversationButton />
         </div>
       </div>
       <div className="min-w-0 flex-1">
