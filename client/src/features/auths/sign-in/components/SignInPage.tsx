@@ -1,4 +1,4 @@
-﻿import { Link } from "@tanstack/react-router";
+﻿import { Link, useNavigate } from "@tanstack/react-router";
 import LogoIcon from "@/assets/logo.png";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import {
   FieldError,
   FieldLabel,
   Input,
+  Spinner,
 } from "@/features/shared";
 import { type SignInFormValues, signInSchema } from "../validators.ts";
 import { signInOptions } from "../sign-in-options.ts";
@@ -15,9 +16,13 @@ import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/features/auths/manage-token";
 import { normalizeApiError } from "@/lib/normalize-api-error.ts";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 export function SignInPage() {
-  const { setAuth } = useAuthStore();
+  const { setAuth, status } = useAuthStore();
+
+  const navigate = useNavigate();
+
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -26,13 +31,17 @@ export function SignInPage() {
     },
   });
 
+  // This effect will listen to the auth status to change, if the user is already authenticated, it will redirect to the chats page
+  useEffect(() => {
+    if (status === "authenticated") {
+      void navigate({ to: "/chats" });
+    }
+  }, [status, navigate]);
+
   const signInMutation = useMutation({
     ...signInOptions(),
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       setAuth(response.token);
-
-      // navigate("/dashboard")
-      // toast.success("Signed in successfully")
     },
     onError: (error) => {
       const normalizedError = normalizeApiError(error);
@@ -70,7 +79,7 @@ export function SignInPage() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="space-y-2">
                   <FieldLabel htmlFor={field.name} className="block text-sm">
-                    Username
+                    Email
                   </FieldLabel>
 
                   <Input
@@ -78,6 +87,7 @@ export function SignInPage() {
                     id={field.name}
                     type="email"
                     aria-invalid={fieldState.invalid}
+                    aria-label={field.name}
                   />
 
                   {fieldState.invalid && (
@@ -116,6 +126,7 @@ export function SignInPage() {
                     type="password"
                     aria-invalid={fieldState.invalid}
                     className="input sz-md variant-mixed"
+                    aria-label={field.name}
                   />
 
                   {fieldState.invalid && (
@@ -130,7 +141,7 @@ export function SignInPage() {
               className="w-full"
               disabled={form.formState.isSubmitting}
             >
-              Sign In
+              {signInMutation.isPending ? <Spinner /> : "Sign in"}
             </Button>
           </div>
 
