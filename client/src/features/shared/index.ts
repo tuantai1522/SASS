@@ -17,6 +17,7 @@ export * from "./components/ui/Toaster";
 export * from "./components/ui/Spinner";
 export * from "./components/ui/Tooltip";
 export * from "./components/ui/Avatar";
+export * from "./components/ui/Dialog";
 
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
