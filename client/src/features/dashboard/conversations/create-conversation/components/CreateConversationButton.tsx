@@ -27,6 +27,7 @@ import {
 } from "../validators.ts";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { normalizedName } from "@/lib";
 
 export function CreateConversationButton() {
   const navigate = useNavigate();
@@ -39,11 +40,18 @@ export function CreateConversationButton() {
     },
   });
 
+  const watchedName = form.watch("name");
+  const transformedName = watchedName ? normalizedName(watchedName) : "";
+
   const { mutate, isPending } = useMutation({
     ...createConversationOptions(),
     onSuccess: async (response) => {
       setOpen(false);
       form.reset();
+
+      toast.success(`Create conversation "${transformedName}" successfully`, {
+        position: "bottom-right",
+      });
 
       await navigate({
         to: "/conversations/$conversationId",
@@ -57,7 +65,6 @@ export function CreateConversationButton() {
   });
 
   function onSubmit(values: CreateConversationFormValues) {
-    console.log("Click");
     mutate(values);
   }
 
@@ -103,6 +110,15 @@ export function CreateConversationButton() {
 
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
+                )}
+
+                {transformedName && (
+                  <p className="text-sm text-muted-foreground">
+                    Will be created as{" "}
+                    <code className="bg-muted px-1 py-0.5 rounded text-xs">
+                      {transformedName}
+                    </code>
+                  </p>
                 )}
               </Field>
             )}
