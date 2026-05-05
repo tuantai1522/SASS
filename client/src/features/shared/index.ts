@@ -18,6 +18,8 @@ export * from "./components/ui/Spinner";
 export * from "./components/ui/Tooltip";
 export * from "./components/ui/Avatar";
 export * from "./components/ui/Dialog";
+export * from "./components/ui/Collapsible";
+export * from "./components/ui/ScrollArea";
 
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
