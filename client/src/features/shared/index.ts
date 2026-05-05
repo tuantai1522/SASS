@@ -24,3 +24,7 @@ export * from "./components/ui/ScrollArea";
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
 export * from "./providers/theme-provider";
+
+export * from "./types/Pagination";
+
+export * from "./hooks/useInfiniteSidebarScroll.ts";
