@@ -6,6 +6,7 @@ public sealed class Conversation : Entity, IAggregateRoot
 {
     private readonly List<ConversationFile> _conversationFiles = [];
     private readonly List<Message> _messages = [];
+    private readonly List<ConversationMember> _conversationMembers = [];
 
     private Conversation()
     {
@@ -13,12 +14,16 @@ public sealed class Conversation : Entity, IAggregateRoot
 
     public static Conversation Create(Guid userId, string name)
     {
-        return new Conversation
+        var conversation = new Conversation
         {
             UserId = userId,
             Name = name,
             LastMessageUpdatedAt = DateTimeOffset.Now.ToUnixTimeSeconds()
         };
+        
+        conversation.AddConversationMember(ConversationMember.Create(conversation.Id, userId, true));
+
+        return conversation;
     }
 
     public string Name { get; private set; } = null!;
@@ -30,6 +35,7 @@ public sealed class Conversation : Entity, IAggregateRoot
 
     public IReadOnlyCollection<ConversationFile> ConversationFiles => _conversationFiles;
     public IReadOnlyCollection<Message> Messages => _messages;
+    public IReadOnlyCollection<ConversationMember> ConversationMembers => _conversationMembers;
 
     public void ChangeName(string name)
     {
@@ -53,17 +59,22 @@ public sealed class Conversation : Entity, IAggregateRoot
 
     public void AddConversationFile(ConversationFile conversationFile)
     {
-        if (conversationFile.ConversationId != Id)
-        {
-            throw new ChatDomainException("Conversation file conversation id does not match current conversation.");
-        }
-
         if (_conversationFiles.Any(x => x.ConversationId == conversationFile.ConversationId && x.FileId == conversationFile.FileId))
         {
             throw new ChatDomainException("Conversation file already exists in this conversation.");
         }
 
         _conversationFiles.Add(conversationFile);
+    }
+    
+    public void AddConversationMember(ConversationMember conversationMember)
+    {
+        if (_conversationMembers.Any(x => x.ConversationId == conversationMember.ConversationId && x.MemberId == conversationMember.MemberId))
+        {
+            throw new ChatDomainException("Conversation member already exists in this conversation.");
+        }
+
+        _conversationMembers.Add(conversationMember);
     }
 
     public void AddMessage(Message message)

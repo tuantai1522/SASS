@@ -14,6 +14,7 @@ public sealed class ChatDbContext(DbContextOptions<ChatDbContext> options) : DbC
     public DbSet<File> Files => Set<File>();
     public DbSet<Conversation> Conversations => Set<Conversation>();
     public DbSet<ConversationFile> ConversationFiles => Set<ConversationFile>();
+    public DbSet<ConversationMember> ConversationMembers => Set<ConversationMember>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ProjectMember> ProjectMembers => Set<ProjectMember>();
