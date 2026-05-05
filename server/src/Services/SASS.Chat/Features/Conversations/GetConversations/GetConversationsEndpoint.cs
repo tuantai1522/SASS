@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SASS.Chat.Features.Conversations.GetConversations;
 
-public sealed class GetConversationsEndpoint : IEndpoint<Ok<CursorPagedResponse<GetConversationsResponse>>, ISender, CursorPagedRequest>
+public sealed class GetConversationsEndpoint : IEndpoint<Ok<CursorPagedResult<GetConversationsResponse>>, ISender, CursorPagedRequest>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -13,10 +13,10 @@ public sealed class GetConversationsEndpoint : IEndpoint<Ok<CursorPagedResponse<
             .WithDescription("Get user conversations with cursor pagination")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization()
-            .Produces<CursorPagedResponse<GetConversationsResponse>>();
+            .Produces<CursorPagedResult<GetConversationsResponse>>();
     }
 
-    public async Task<Ok<CursorPagedResponse<GetConversationsResponse>>> HandleAsync(
+    public async Task<Ok<CursorPagedResult<GetConversationsResponse>>> HandleAsync(
         ISender sender,
         [AsParameters] CursorPagedRequest request,
         CancellationToken cancellationToken = default
