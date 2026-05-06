@@ -7,5 +7,7 @@ export const queryKeys = {
   conversations: {
     list: (params: GetConversationsRequest) =>
       ["conversations", "list", params] as const,
+    detail: (conversationId: string) =>
+      ["conversations", "detail", conversationId] as const,
   },
 };
