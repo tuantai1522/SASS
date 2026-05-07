@@ -17,9 +17,8 @@ import {
   Input,
   Spinner,
 } from "@/features/shared";
-import { createConversationOptions } from "../create-conversation-options.ts";
+import { createConversationOptions } from "../create-conversation-options";
 import { useMutation } from "@tanstack/react-query";
-import { normalizeApiError } from "@/lib/normalize-api-error.ts";
 import { toast } from "sonner";
 import {
   type CreateConversationFormValues,
@@ -27,7 +26,7 @@ import {
 } from "../validators.ts";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { normalizedName } from "@/lib";
+import { normalizedName, normalizeApiError } from "@/lib";
 
 export function CreateConversationButton() {
   const navigate = useNavigate();

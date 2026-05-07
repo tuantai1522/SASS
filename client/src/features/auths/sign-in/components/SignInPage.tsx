@@ -136,11 +136,7 @@ export function SignInPage() {
               )}
             />
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={form.formState.isSubmitting}
-            >
+            <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? <Spinner /> : "Sign in"}
             </Button>
           </div>
