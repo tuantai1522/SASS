@@ -6,20 +6,22 @@ public sealed class Message : Entity
     {
     }
 
-    public static Message Create(Guid conversationId, string content, MessageRole role, long createdAt)
+    public static Message Create(Guid conversationId, string content, Guid senderId)
     {
         return new Message
         {
             ConversationId = conversationId,
             Content = content,
-            Role = role,
-            CreatedAt = createdAt
+            SenderId = senderId,
         };
     }
 
     public string Content { get; private set; } = null!;
-    public MessageRole Role { get; private set; }
-    public long CreatedAt { get; private set; }
+    
+    public Guid? SenderId { get; private set; }
+    public User? Sender { get; private set; }
+
+    public long CreatedAt { get; private init; } = DateTimeOffset.Now.ToUnixTimeSeconds();
 
     public Guid ConversationId { get; private set; }
     public Conversation Conversation { get; private set; } = null!;

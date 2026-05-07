@@ -11,15 +11,16 @@ public sealed class MessagesConfiguration : IEntityTypeConfiguration<Message>
 
         builder.HasKey(x => x.Id);
         builder.Property(p => p.Id).HasDefaultValueSql(UniqueIdentifierHelper.NewUuidV7);
+        builder.Property(x => x.Id).ValueGeneratedNever();
 
         builder
             .Property(x => x.Content)
             .IsRequired();
 
-        builder.Property(x => x.Role)
-            .HasConversion<string>()
-            .HasMaxLength(32)
-            .IsRequired();
+        builder.HasOne(x => x.Sender)
+            .WithMany()
+            .HasForeignKey(x => x.SenderId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.CreatedAt)
             .HasColumnType("bigint")
