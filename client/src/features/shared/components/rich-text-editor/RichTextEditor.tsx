@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/features/shared";
 import { Placeholder } from "@tiptap/extensions/placeholder";
+import Image from "@tiptap/extension-image";
 
 type RichTextEditorContextValue = {
   editor: Editor;
@@ -62,6 +63,7 @@ function RichTextEditorRoot({
       Placeholder.configure({
         placeholder,
       }),
+      Image,
     ],
     content: () => {
       try {
