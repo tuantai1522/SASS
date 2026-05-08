@@ -1,4 +1,5 @@
 ﻿import type { GetConversationsRequest } from "@/features/dashboard/conversations/get-conversations";
+import type { GetMessagesRequest } from "@/features/dashboard/messages/get-messages";
 
 export const queryKeys = {
   auth: {
@@ -9,5 +10,9 @@ export const queryKeys = {
       ["conversations", "list", params] as const,
     detail: (conversationId: string) =>
       ["conversations", "detail", conversationId] as const,
+  },
+  messages: {
+    list: (params: GetMessagesRequest) =>
+      ["messages", "list", params] as const,
   },
 };

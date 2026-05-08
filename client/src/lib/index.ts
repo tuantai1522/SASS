@@ -4,3 +4,4 @@ export * from "./utils";
 export * from "./query-keys";
 export * from "./constants";
 export * from "./normalize-api-error";
+export * from "./json-to-html";
