@@ -1,7 +1,6 @@
 import { createContext, type ReactNode, useContext, useEffect } from "react";
 import { type Editor, useEditorState } from "@tiptap/react";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import {
   Bold,
   Code,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib";
 import {
+  baseExtensions,
   Button,
   Toggle,
   Tooltip,
@@ -24,7 +24,6 @@ import {
   TooltipTrigger,
 } from "@/features/shared";
 import { Placeholder } from "@tiptap/extensions/placeholder";
-import Image from "@tiptap/extension-image";
 
 type RichTextEditorContextValue = {
   editor: Editor;
@@ -59,11 +58,10 @@ function RichTextEditorRoot({
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      ...baseExtensions,
       Placeholder.configure({
         placeholder,
       }),
-      Image,
     ],
     content: () => {
       try {

@@ -27,6 +27,8 @@
     "axios": "^1.15.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dompurify": "^3.4.2",
+    "html-react-parser": "^6.1.0",
     "init": "^0.1.2",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
