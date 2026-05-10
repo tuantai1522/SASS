@@ -25,7 +25,8 @@ internal sealed class GetMessagesQueryHandler(
         
         var conversationExists = await dbContext.Conversations
             .AsNoTracking()
-            .AnyAsync(x => x.ConversationMembers.Any(cm => cm.MemberId == userProvider.UserId && 
+            .AnyAsync(x => x.ConversationMembers.Any(cm => cm.ConversationId == request.ConversationId &&
+                                                           cm.MemberId == userProvider.UserId && 
                                                            !cm.IsDeleted), cancellationToken);
 
         Guard.Against.NotFound<Project>(conversationExists, request.ConversationId);
@@ -62,6 +63,8 @@ internal sealed class GetMessagesQueryHandler(
             nextCursor = CursorToken.Encode(new CursorToken(last.CreatedAt, last.Id));
         }
 
+        // Reverse items so client can show latest messages at the end
+        pageItems.Reverse();
         return new CursorPagedResult<GetMessagesResponse>(pageItems, nextCursor, hasNextPage);
     }
 }

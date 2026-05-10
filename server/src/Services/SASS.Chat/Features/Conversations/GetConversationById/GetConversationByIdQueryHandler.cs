@@ -15,11 +15,12 @@ internal sealed class GetConversationByIdQueryHandler(
     {
         var response = await dbContext.Conversations
             .AsNoTracking()
-            .Where(x => x.Id == request.ConversationId && x.UserId == userProvider.UserId)
+            .Where(c => c.ConversationMembers.Any(cm =>
+                cm.ConversationId == request.ConversationId &&
+                cm.MemberId == userProvider.UserId &&
+                !cm.IsDeleted))
             .Select(x => new GetConversationByIdResponse(x.Id, x.Name))
-            .FirstOrDefaultAsync(
-                cancellationToken
-            );
+            .FirstOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(response, request.ConversationId);
 
