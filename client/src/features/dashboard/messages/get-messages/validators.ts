@@ -13,6 +13,6 @@ export const getMessagesParamsSchema = getMessagesBodySchema.extend({
 
 export const defaultMessagesParams = getMessagesBodySchema.parse({
   cursor: null,
-  limit: PAGINATION.DEFAULT_PAGE_SIZE,
+  limit: PAGINATION.DEFAULT_MESSAGE_PAGE_SIZE,
   order: "Desc",
 });

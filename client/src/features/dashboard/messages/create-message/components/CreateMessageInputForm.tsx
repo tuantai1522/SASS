@@ -65,6 +65,7 @@ export function CreateMessageInputForm({
             onSubmit={() => handleSubmit(form.getValues())}
             isSubmitting={isPending}
             placeholder={"Type a message"}
+            className="m-2"
           >
             <RichTextEditorToolbar />
             <RichTextEditorInput />

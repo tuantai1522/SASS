@@ -17,6 +17,7 @@ import { cn } from "@/lib";
 import {
   baseExtensions,
   Button,
+  createComposerShortcutExtension,
   Toggle,
   Tooltip,
   TooltipContent,
@@ -59,6 +60,10 @@ function RichTextEditorRoot({
     immediatelyRender: false,
     extensions: [
       ...baseExtensions,
+      createComposerShortcutExtension({
+        onSubmit,
+        isSubmitting,
+      }),
       Placeholder.configure({
         placeholder,
       }),

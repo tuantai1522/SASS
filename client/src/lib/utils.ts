@@ -50,7 +50,7 @@ export function formatDate(
   }
 
   if (isSameDay) {
-    return timeText;
+    return `${rtf.format(0, "day")} ${timeText}`;
   }
 
   if (isYesterday) {

@@ -1,3 +1,4 @@
 export const PAGINATION = {
   DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_MESSAGE_PAGE_SIZE: 15,
 } as const;

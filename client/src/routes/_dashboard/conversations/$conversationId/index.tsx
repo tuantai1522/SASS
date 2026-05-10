@@ -25,18 +25,18 @@ function ConversationPage() {
   const { conversationId } = Route.useParams();
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex h-full min-h-0 w-full flex-1 flex-col">
       {/*Conversation Header*/}
       <ConversationHeader conversationId={conversationId} />
 
       {/* Scrollable messages area */}
 
-      <div className="flex-1 overflow-hidden mb-4">
+      <div className="mb-2 min-h-0 flex-1 overflow-hidden">
         <MessageList conversationId={conversationId} />
       </div>
 
       {/*  Input message form*/}
-      <div className="border-t bg-background p-4">
+      <div className="border-t bg-background">
         <CreateMessageInputForm conversationId={conversationId} />
       </div>
     </div>

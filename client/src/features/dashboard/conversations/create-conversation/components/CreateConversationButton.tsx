@@ -72,7 +72,7 @@ export function CreateConversationButton() {
       <DialogTrigger asChild>
         <Button
           type="button"
-          variant="outline"
+          variant="default"
           className="w-full cursor-pointer hover:bg-accent hover:text-accent-foreground"
         >
           <Plus className="size-4" />
