@@ -1,3 +1,5 @@
+using SASS.Chat.Domain.Events.Conversations;
+
 namespace SASS.Chat.Domain.AggregatesModel.Conversations;
 
 public sealed class Message : Entity
@@ -8,12 +10,16 @@ public sealed class Message : Entity
 
     public static Message Create(Guid conversationId, string content, Guid senderId)
     {
-        return new Message
+        var message = new Message
         {
             ConversationId = conversationId,
             Content = content,
             SenderId = senderId,
         };
+
+        message.RegisterDomainEvent(new MessageCreatedDomainEvent(message.Id));
+
+        return message;
     }
 
     public string Content { get; private set; } = null!;
