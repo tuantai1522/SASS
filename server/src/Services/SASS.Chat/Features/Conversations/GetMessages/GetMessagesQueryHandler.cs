@@ -41,10 +41,12 @@ internal sealed class GetMessagesQueryHandler(
                 ? query.Where(x => EF.Functions.GreaterThan(ValueTuple.Create(x.CreatedAt, x.Id), ValueTuple.Create(createdAt, lastId)))
                 : query.Where(x => EF.Functions.LessThan(ValueTuple.Create(x.CreatedAt, x.Id), ValueTuple.Create(createdAt, lastId)));
         }
+        
+        query = request.CursorRequest.Order == Order.Asc
+            ? query.OrderBy(x => x.CreatedAt).ThenBy(x => x.Id)
+            : query.OrderByDescending(x => x.CreatedAt).ThenByDescending(x => x.Id);
 
         var messages = await query
-            .OrderByDescending(x => x.CreatedAt)
-            .ThenByDescending(x => x.Id)
             .Select(x => new GetMessagesResponse(
                 x.Id, x.Content, x.CreatedAt, x.SenderId == userProvider.UserId, 
                 x.SenderId, x.Sender != null ? x.Sender.DisplayName : null, x.Sender != null ? x.Sender.AvatarUrl : null))
