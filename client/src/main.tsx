@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import {
   AppRouterProvider,
   AuthProvider,
+  RealtimeProvider,
   ThemeProvider,
   Toaster,
 } from "@/features/shared";
@@ -12,8 +13,10 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider>
       {/*AuthProvider runs first to provide status for AppRouterProvider*/}
       <AuthProvider>
-        <AppRouterProvider />
-        <Toaster />
+        <RealtimeProvider>
+          <AppRouterProvider />
+          <Toaster />
+        </RealtimeProvider>
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,

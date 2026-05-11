@@ -28,6 +28,7 @@ export * from "./components/rich-text-editor/SafeContent";
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
 export * from "./providers/theme-provider";
+export * from "./providers/realtime-provider";
 
 export * from "./types/Pagination";
 export * from "./types/IdResponse";
