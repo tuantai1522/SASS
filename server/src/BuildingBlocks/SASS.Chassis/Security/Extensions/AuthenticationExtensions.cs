@@ -27,11 +27,11 @@ public static class AuthenticationExtensions
                         o.Secret,
                         o.Issuer,
                         o.Audience
-                    }.All(v => !string.IsNullOrWhiteSpace(v)) && 
+                    }.All(v => !string.IsNullOrWhiteSpace(v)) &&
                     o.ExpiredAccessToken > 0,
                 "JwtOptions is invalid")
             .ValidateOnStart();
-        
+
         services.AddSingleton(sp =>
         {
             var jwtOptions = sp.GetRequiredService<IOptions<JwtOptions>>().Value;
@@ -57,6 +57,25 @@ public static class AuthenticationExtensions
             .AddJwtBearer(opt =>
             {
                 opt.RequireHttpsMetadata = false;
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(context.Token))
+                        {
+                            return Task.CompletedTask;
+                        }
+
+                        var accessToken = context.Request.Query["access_token"];
+
+                        if (!string.IsNullOrWhiteSpace(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -71,11 +90,11 @@ public static class AuthenticationExtensions
             });
 
         services.AddHttpContextAccessor();
-        
+
         services
             .AddScoped<IUserProvider, UserProvider>()
             .AddScoped<ITokenProvider, TokenProvider>();
-        
+
         return builder;
     }
 
@@ -83,12 +102,12 @@ public static class AuthenticationExtensions
     {
         var services = builder.Services;
         var configuration = builder.Configuration;
-        
+
         services.AddOptions<PasswordHashingOptions>()
             .Bind(configuration.GetSection(nameof(PasswordHashingOptions)))
             .Validate(o => !string.IsNullOrWhiteSpace(o.CurrentAlgorithm), "PasswordHashingOptions is invalid")
             .ValidateOnStart();
-        
+
         services.AddKeyedSingleton<IPasswordHashAlgorithm, Pbkdf2PasswordHashAlgorithm>("pbkdf2-sha512");
     }
 }

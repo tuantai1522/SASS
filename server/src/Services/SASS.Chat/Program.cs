@@ -1,4 +1,5 @@
 using SASS.Chat.Extensions;
+using SASS.Chat.Realtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,6 @@ var app = builder.Build();
 app.UseExceptionHandler();
 
 app.UseApiDocumentation();
-app.UseAuthentication();
-app.UseAuthorization();
 
 var apiVersionSet = app.NewApiVersionSet()
     .HasApiVersion(ApiVersions.V1)
@@ -18,12 +17,13 @@ var apiVersionSet = app.NewApiVersionSet()
     .Build();
 
 app.MapEndpoints(apiVersionSet);
+app.MapRealtimeEndpoints();
 
 app.UseDefaultCors();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();

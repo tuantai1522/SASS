@@ -4,6 +4,7 @@ using SASS.Chassis.Storage.Extensions;
 using SASS.Chassis.WebStorages.Extensions;
 using SASS.Chat.Configurations;
 using SASS.Chat.Infrastructure;
+using SASS.Chat.Realtime;
 
 namespace SASS.Chat.Extensions;
 
@@ -13,18 +14,18 @@ public static class Extensions
     {
         // Add all options of system
         builder.AddOptions(builder.Configuration);
-        
+
         builder.AddDefaultCors();
 
         builder.AddDefaultApiDocumentation();
 
         builder.Services.AddVersioning();
         builder.Services.AddEndpoints(typeof(IChatApiMarker));
-        
+
         builder.AddDefaultAuthentication();
         builder.AddPasswordHashingService();
         builder.Services.AddAuthorization();
-        
+
         // Add exception handlers
         // Exception related to bad request (404)
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
@@ -37,31 +38,34 @@ public static class Extensions
 
         // Exception related to unauthorized (401)
         builder.Services.AddExceptionHandler<UnauthorizedExceptionHandler>();
-        
+
         // Global exception
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-        
+
         builder.Services.AddProblemDetails();
-        
+
         builder.Services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(typeof(IChatApiMarker).Assembly);
 
             config.ApplyLoggingBehavior();
-            
+
             config.ApplyValidationBehavior();
-        });        
+        });
         // Add database configuration
         builder.AddPersistenceServices();
-                
+        
+        // Add real-time SignalR service
+        builder.AddRealtimeServices();
+
         // Configure FluentValidation
         builder.Services.AddValidatorsFromAssemblyContaining<IChatApiMarker>(includeInternalTypes: true);
-        
+
         // Add google authentication
         builder.AddGoogleAuthentication();
-        
+
         builder.AddMediaStorage();
-        
+
         builder.AddWebStorage();
     }
 
@@ -78,7 +82,7 @@ public static class Extensions
             .Bind(builder.Configuration.GetSection("SystemOptions"))
             .Validate(x => !string.IsNullOrWhiteSpace(x.DefaultConversationName), "Can't validate SystemOptions")
             .ValidateOnStart();
-        
+
         builder.Services.AddOptions<GoogleAuthOptions>()
             .Bind(configuration.GetSection("GoogleAuth"))
             .Validate(o =>
@@ -91,7 +95,7 @@ public static class Extensions
                         o.GoogleUrl,
                         o.GoogleAuthTokenEndpoint,
                         o.GoogleContactInfoEndpoint
-                    }.All(v => !string.IsNullOrWhiteSpace(v)), 
+                    }.All(v => !string.IsNullOrWhiteSpace(v)),
                 "GoogleAuthOptions is invalid")
             .ValidateOnStart();
     }
@@ -100,5 +104,5 @@ public static class Extensions
     {
         builder.Services.AddScalarApiDocumentation<ChatAppSettings>();
     }
-    
+
 }
