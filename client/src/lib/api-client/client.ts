@@ -77,13 +77,13 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const data = await renewAccessToken();
+      const response = await renewAccessToken();
 
-      useAuthStore.getState().setAuth(data.token);
+      useAuthStore.getState().setAuth({ accessToken: response.token, userId: response.userId });
 
-      resolveRefreshQueue(data.token);
+      resolveRefreshQueue(response.token);
 
-      originalRequest.headers.Authorization = `Bearer ${data.token}`;
+      originalRequest.headers.Authorization = `Bearer ${response.token}`;
 
       return apiClient(originalRequest);
     } catch (refreshError) {

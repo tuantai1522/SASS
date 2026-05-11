@@ -41,7 +41,7 @@ export function SignInPage() {
   const { mutate, isPending } = useMutation({
     ...signInOptions(),
     onSuccess: async (response) => {
-      setAuth(response.token);
+      setAuth({ accessToken: response.token, userId: response.userId });
     },
     onError: (error) => {
       const normalizedError = normalizeApiError(error);

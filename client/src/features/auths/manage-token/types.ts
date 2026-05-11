@@ -2,10 +2,11 @@
 
 export type AuthState = {
   accessToken: string | null;
+  userId: string | null;
   status: AuthStatus;
   hasBootstrapped: boolean;
 
-  setAuth: (accessToken: string) => void;
+  setAuth: (payload: { accessToken: string; userId: string }) => void;
   clearAuth: () => void;
   setHasBootstrapped: (value: boolean) => void;
 };

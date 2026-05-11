@@ -3,13 +3,15 @@ import type { AuthState } from "./types";
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
+  userId: null,
   user: null,
   status: "loading",
   hasBootstrapped: false,
 
-  setAuth: (accessToken: string) =>
+  setAuth: (payload: { accessToken: string; userId: string }) =>
     set({
-      accessToken,
+      accessToken: payload.accessToken,
+      userId: payload.userId,
       status: "authenticated",
       hasBootstrapped: true,
     }),

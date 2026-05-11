@@ -1,13 +1,15 @@
 ﻿import { type ReactNode, useEffect } from "react";
 import { useAuthStore } from "@/features/auths/manage-token";
 import { renewAccessToken } from "@/features/auths/renew-access-token";
+import type { RenewAccessTokenResponse } from "@/features/auths/renew-access-token";
 
-let bootstrapAuthPromise: Promise<string | null> | null = null;
+let bootstrapAuthPromise: Promise<RenewAccessTokenResponse | null> | null =
+  null;
 
 function getBootstrapAuthPromise() {
   if (!bootstrapAuthPromise) {
     bootstrapAuthPromise = renewAccessToken()
-      .then((data) => data.token)
+      .then((data) => data)
       .catch(() => null);
   }
 
@@ -22,18 +24,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     async function bootstrapAuth() {
-      const token = await getBootstrapAuthPromise();
+      const response = await getBootstrapAuthPromise();
 
       if (cancelled) return;
 
-      if (token) {
-        setAuth(token);
+      if (response) {
+        setAuth({ accessToken: response.token, userId: response.userId });
       } else {
         clearAuth();
       }
     }
 
-    bootstrapAuth();
+    void bootstrapAuth();
 
     return () => {
       cancelled = true;

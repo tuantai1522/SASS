@@ -1,2 +1,2 @@
 ﻿export * from "./auth-store";
-export * from "./types.ts";
+export * from "./types";

@@ -1,1 +1,1 @@
-﻿export * from "./get-me-options.ts";
+﻿export * from "./get-me-options";
