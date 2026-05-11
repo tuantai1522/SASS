@@ -27,6 +27,7 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { normalizedName, normalizeApiError } from "@/lib";
+import { useWatch } from "react-hook-form";
 
 export function CreateConversationButton() {
   const navigate = useNavigate();
@@ -39,7 +40,10 @@ export function CreateConversationButton() {
     },
   });
 
-  const watchedName = form.watch("name");
+  const watchedName = useWatch({
+    control: form.control,
+    name: "name",
+  });
   const transformedName = watchedName ? normalizedName(watchedName) : "";
 
   const { mutate, isPending } = useMutation({

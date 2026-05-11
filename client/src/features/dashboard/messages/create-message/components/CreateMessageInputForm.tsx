@@ -60,6 +60,7 @@ export function CreateMessageInputForm({
         name="content"
         render={({ field }) => (
           <RichTextEditorRoot
+            key={conversationId}
             content={field.value}
             onChange={field.onChange}
             onSubmit={() => handleSubmit(form.getValues())}

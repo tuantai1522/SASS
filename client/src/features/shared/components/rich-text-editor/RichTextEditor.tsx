@@ -95,7 +95,7 @@ function RichTextEditorRoot({
     if (content === "") {
       editor?.commands.clearContent();
     }
-  }, [content]);
+  }, [content, editor]);
 
   if (!editor) {
     return;
