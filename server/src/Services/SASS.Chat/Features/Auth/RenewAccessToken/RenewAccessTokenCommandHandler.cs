@@ -40,6 +40,6 @@ internal sealed class RenewAccessTokenCommandHandler(
         // Set cookie of refreshToken in browser
         cookieService.Set(Application.RefreshTokenCookieName, newRefreshToken, expiredAt);
         
-        return new RenewAccessTokenResponse(accessToken);
+        return new RenewAccessTokenResponse(accessToken, user.Id);
     }
 }

@@ -47,6 +47,6 @@ internal sealed class SignInCommandHandler(
         // 2. Set cookie of refreshToken in browser
         cookieService.Set(Application.RefreshTokenCookieName, refreshToken, expiredAt);
 
-        return new SignInResponse(accessToken);
+        return new SignInResponse(accessToken, user.Id);
     }
 }

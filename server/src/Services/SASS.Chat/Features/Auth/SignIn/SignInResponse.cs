@@ -1,3 +1,3 @@
 namespace SASS.Chat.Features.Auth.SignIn;
 
-public sealed record SignInResponse(string Token);
+public sealed record SignInResponse(string Token, Guid UserId);
