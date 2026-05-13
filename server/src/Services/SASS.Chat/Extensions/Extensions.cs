@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Options;
 using Qdrant.Client;
+using SASS.Chassis.AI.Settings;
 using SASS.Chassis.Security.Extensions;
 using SASS.Chassis.Storage.Extensions;
 using SASS.Chassis.WebStorages.Extensions;
@@ -108,6 +109,25 @@ public static class Extensions
             .Bind(configuration.GetSection(QdrantOptions.SectionName))
             .Validate(o => !string.IsNullOrWhiteSpace(o.Host), "Qdrant host is required")
             .Validate(o => o.Port > 0, "Qdrant port must be greater than zero")
+            .ValidateOnStart();
+
+        builder.Services.AddSingleton(sp =>
+        {
+            var qdrantOptions = sp.GetRequiredService<IOptions<QdrantOptions>>().Value;
+
+            return new QdrantClient(
+                qdrantOptions.Host,
+                qdrantOptions.Port,
+                qdrantOptions.Https,
+                qdrantOptions.ApiKey
+            );
+        });
+        
+        builder.Services.AddOptions<ChunkingAIOptions>()
+            .Bind(configuration.GetSection(ChunkingAIOptions.SectionName))
+            .Validate(o => o.MaxTokensPerLine > 0, "MaxTokensPerLine port must be greater than zero")
+            .Validate(o => o.MaxTokensPerParagraph > 0, "MaxTokensPerParagraph port must be greater than zero")
+            .Validate(o => o.OverlapTokens > 0, "OverlapTokens port must be greater than zero")
             .ValidateOnStart();
 
         builder.Services.AddSingleton(sp =>
