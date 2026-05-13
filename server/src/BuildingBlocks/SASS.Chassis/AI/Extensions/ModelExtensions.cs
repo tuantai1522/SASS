@@ -19,7 +19,7 @@ public static class ModelExtensions
             var services = builder.Services;
             
             services.AddOptions<OpenRouterAIOptions>()
-                .Bind(configuration.GetSection(nameof(OpenRouterAIOptions)))
+                .Bind(configuration.GetSection(OpenRouterAIOptions.SectionName))
                 .Validate(o =>
                         new[]
                         {

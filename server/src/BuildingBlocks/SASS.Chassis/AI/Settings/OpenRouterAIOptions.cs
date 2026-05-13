@@ -2,6 +2,8 @@
 
 public sealed class OpenRouterAIOptions
 {
+    public const string SectionName = "OpenRouterAI";
+
     public required string Url { get; init; }
     public required string ApiKey { get; init; }
     public required string ChatModelId { get; init; }

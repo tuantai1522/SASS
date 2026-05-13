@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.Extensions.Options;
+using Qdrant.Client;
 using SASS.Chassis.Security.Extensions;
 using SASS.Chassis.Storage.Extensions;
 using SASS.Chassis.WebStorages.Extensions;
@@ -54,7 +56,10 @@ public static class Extensions
         });
         // Add database configuration
         builder.AddPersistenceServices();
-        
+
+        // Configure AI
+        builder.AddAI();
+
         // Add real-time SignalR service
         builder.AddRealtimeServices();
 
@@ -79,12 +84,12 @@ public static class Extensions
     private static void AddOptions(this IHostApplicationBuilder builder, IConfiguration configuration)
     {
         builder.Services.AddOptions<SystemOptions>()
-            .Bind(builder.Configuration.GetSection("SystemOptions"))
+            .Bind(configuration.GetSection(SystemOptions.SectionName))
             .Validate(x => !string.IsNullOrWhiteSpace(x.DefaultConversationName), "Can't validate SystemOptions")
             .ValidateOnStart();
 
         builder.Services.AddOptions<GoogleAuthOptions>()
-            .Bind(configuration.GetSection("GoogleAuth"))
+            .Bind(configuration.GetSection(GoogleAuthOptions.SectionName))
             .Validate(o =>
                     new[]
                     {
@@ -95,9 +100,27 @@ public static class Extensions
                         o.GoogleUrl,
                         o.GoogleAuthTokenEndpoint,
                         o.GoogleContactInfoEndpoint
-                    }.All(v => !string.IsNullOrWhiteSpace(v)),
+                        }.All(v => !string.IsNullOrWhiteSpace(v)),
                 "GoogleAuthOptions is invalid")
             .ValidateOnStart();
+
+        builder.Services.AddOptions<QdrantOptions>()
+            .Bind(configuration.GetSection(QdrantOptions.SectionName))
+            .Validate(o => !string.IsNullOrWhiteSpace(o.Host), "Qdrant host is required")
+            .Validate(o => o.Port > 0, "Qdrant port must be greater than zero")
+            .ValidateOnStart();
+
+        builder.Services.AddSingleton(sp =>
+        {
+            var qdrantOptions = sp.GetRequiredService<IOptions<QdrantOptions>>().Value;
+
+            return new QdrantClient(
+                qdrantOptions.Host,
+                qdrantOptions.Port,
+                qdrantOptions.Https,
+                qdrantOptions.ApiKey
+            );
+        });
     }
 
     private static void AddDefaultApiDocumentation(this IHostApplicationBuilder builder)
