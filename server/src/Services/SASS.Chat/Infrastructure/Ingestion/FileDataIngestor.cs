@@ -21,7 +21,8 @@ internal sealed class FileDataIngestor(
 
         var record = new TextSnippet
         {
-            Id = data.Id,
+            Id = Guid.NewGuid(),
+            UserId = data.UserId,
             Content = data.Content,
             Vector = embeddings,
             Index = data.Index,

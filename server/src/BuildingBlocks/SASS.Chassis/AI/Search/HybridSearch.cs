@@ -8,6 +8,7 @@ internal sealed class HybridSearch(
     VectorStoreCollection<Guid, TextSnippet> collection ) : ISearch
 {
     public async Task<IReadOnlyList<TextSnippetResult>> SearchAsync(
+        Guid userId,
         string text,
         int maxResults = 20,
         CancellationToken cancellationToken = default
@@ -26,6 +27,8 @@ internal sealed class HybridSearch(
         {
             VectorProperty = r => r.Vector,
             AdditionalProperty = r => r.Content,
+            
+            Filter = snippet => snippet.UserId == userId
         };
 
         var nearest = vectorCollection.HybridSearchAsync(

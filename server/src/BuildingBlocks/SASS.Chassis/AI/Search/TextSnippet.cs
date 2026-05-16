@@ -10,12 +10,16 @@ public sealed class TextSnippet
     private const string VectorDistanceFunction = DistanceFunction.CosineSimilarity;
     public const string CollectionName = "data-sass-snippets";
 
+    [VectorStoreKey(StorageName = "id")]
+    [JsonPropertyName("id")]
+    public required Guid Id { get; init; }
+    
     /// <summary>
     /// Key from entity (this can be ProductId, ProjectId, TaskId, ...)
     /// </summary>
-    [VectorStoreKey(StorageName = "key")]
-    [JsonPropertyName("key")]
-    public required Guid Id { get; init; }
+    [VectorStoreData(StorageName = "user_id")]
+    [JsonPropertyName("user_id")]
+    public required Guid UserId { get; init; }
 
     [VectorStoreData(IsFullTextIndexed = true, StorageName = "content")]
     [JsonPropertyName("content")]
