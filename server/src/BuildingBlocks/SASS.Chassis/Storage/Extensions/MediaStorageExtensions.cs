@@ -29,15 +29,16 @@ public static class MediaStorageExtensions
     private static void AddCloudflareR2(this IHostApplicationBuilder builder, IConfiguration configuration)
     {
         builder.Services.AddOptions<CloudflareR2Options>()
-            .Bind(configuration.GetSection(nameof(CloudflareR2Options)))
+            .Bind(configuration.GetSection(CloudflareR2Options.SectionName))
             .Validate(o =>
                     new[]
                     {
                         o.AccessKeyId,
+                        o.SecretAccessKey,
                         o.BucketName,
-                        o.SecretAccessKey
+                        o.ServiceUrl
                     }.All(v => !string.IsNullOrWhiteSpace(v)),
-                "JwtOptions is invalid")
+                "CloudflareR2 is invalid")
             .ValidateOnStart();
         
         builder.Services.AddSingleton<IAmazonS3>(provider =>
@@ -46,7 +47,7 @@ public static class MediaStorageExtensions
 
             var config = new AmazonS3Config
             {
-                ServiceURL = "https://3a3d8f07c684619db1a93ca07b262e29.r2.cloudflarestorage.com",
+                ServiceURL = options.ServiceUrl,
                 ForcePathStyle = true,
                 AuthenticationRegion = "auto"
             };
