@@ -1,4 +1,5 @@
 using SASS.Chat.Domain.Exceptions;
+using SASS.Chat.Domain.Events.Files;
 
 namespace SASS.Chat.Domain.AggregatesModel.Files;
 
@@ -38,6 +39,17 @@ public sealed class File : Entity, IAggregateRoot
     public void UpdateUploadStatus(UploadStatus uploadStatus)
     {
         UploadStatus = uploadStatus;
+    }
+
+    public void MarkUploaded()
+    {
+        UploadStatus = UploadStatus.Uploaded;
+        RegisterDomainEvent(new FileUploadedDomainEvent(Id));
+    }
+
+    public void MarkProcessing()
+    {
+        UploadStatus = UploadStatus.Processing;
     }
 
     public void AddConversationFile(ConversationFile conversationFile)

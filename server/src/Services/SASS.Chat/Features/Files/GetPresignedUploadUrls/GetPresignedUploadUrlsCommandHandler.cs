@@ -20,10 +20,10 @@ internal sealed class GetPresignedUploadUrlsCommandHandler(
         var mediaStorage = serviceProvider.GetRequiredKeyedService<IMediaStorage>(mediaStorageOptions.Value.Provider);
         var destinationPath = $"conversations/{request.ConversationId}";
 
-        var responseItems = new List<PresignedUploadFileItem>(request.Request.Files.Count);
+        var responseItems = new List<PresignedUploadFileItem>(request.Files.Count);
 
         List<File> files = [];
-        foreach (var input in request.Request.Files)
+        foreach (var input in request.Files)
         {
             var contentType = string.IsNullOrWhiteSpace(input.ContentType)
                 ? "application/octet-stream"

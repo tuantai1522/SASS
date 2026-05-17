@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SASS.Chat.Features.Files.GetPresignedUploadUrls;
 
 public sealed class GetPresignedUploadUrlsEndpoint
-    : IEndpoint<Ok<GetPresignedUploadUrlsResponse>, Guid, GetPresignedUploadUrlsRequest, ISender>
+    : IEndpoint<Ok<GetPresignedUploadUrlsResponse>, Guid, IReadOnlyList<GetPresignedUploadFileItems>, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -20,7 +20,7 @@ public sealed class GetPresignedUploadUrlsEndpoint
 
     public async Task<Ok<GetPresignedUploadUrlsResponse>> HandleAsync(
         [FromRoute] Guid conversationId,
-        [FromBody] GetPresignedUploadUrlsRequest request,
+        [FromBody] IReadOnlyList<GetPresignedUploadFileItems> request,
         ISender sender,
         CancellationToken cancellationToken = default
     )

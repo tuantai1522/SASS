@@ -9,7 +9,7 @@ internal sealed class GetPresignedUploadUrlsCommandValidator : AbstractValidator
         RuleFor(x => x.ConversationId)
             .NotEmpty();
 
-        RuleFor(x => x.Request.Files)
+        RuleFor(x => x.Files)
             .NotEmpty()
             .Must(files => files.Count <= 20)
             .WithMessage("Maximum 20 files per request.");

@@ -23,7 +23,7 @@ internal sealed class CompleteFilesUploadCommandHandler(
 
         foreach (var file in files)
         {
-            file.UpdateUploadStatus(UploadStatus.Processing);
+            file.MarkUploaded();
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);
