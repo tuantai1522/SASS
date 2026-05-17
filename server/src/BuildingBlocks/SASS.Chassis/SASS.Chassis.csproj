@@ -23,6 +23,8 @@
         <PackageReference Include="PdfPig" Version="0.1.15-alpha-20260427-046a5" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.13.13" />
         <PackageReference Include="Scrutor" Version="7.0.0" />
+        <PackageReference Include="WolverineFx" Version="5.39.1" />
+        <PackageReference Include="WolverineFx.RabbitMQ" Version="5.39.1" />
     </ItemGroup>
     
     <ItemGroup Label="AI">

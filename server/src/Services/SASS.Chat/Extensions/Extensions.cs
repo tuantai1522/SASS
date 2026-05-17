@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Options;
 using Qdrant.Client;
 using SASS.Chassis.AI.Settings;
+using SASS.Chassis.Messaging;
 using SASS.Chassis.Security.Extensions;
 using SASS.Chassis.Storage.Extensions;
 using SASS.Chassis.WebStorages.Extensions;
@@ -60,6 +61,12 @@ public static class Extensions
 
         // Configure AI
         builder.AddAI();
+
+        // Configure Wolverine with RabbitMQ
+        builder.AddMessagingQueue(options =>
+        {
+            options.Discovery.IncludeAssembly(typeof(IChatApiMarker).Assembly);
+        });
 
         // Add real-time SignalR service
         builder.AddRealtimeServices();
@@ -122,7 +129,7 @@ public static class Extensions
                 qdrantOptions.ApiKey
             );
         });
-        
+
         builder.Services.AddOptions<ChunkingAIOptions>()
             .Bind(configuration.GetSection(ChunkingAIOptions.SectionName))
             .Validate(o => o.MaxTokensPerLine > 0, "MaxTokensPerLine port must be greater than zero")
