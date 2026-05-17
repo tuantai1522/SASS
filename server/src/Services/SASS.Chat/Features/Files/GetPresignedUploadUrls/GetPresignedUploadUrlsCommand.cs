@@ -2,5 +2,5 @@ using MediatR;
 
 namespace SASS.Chat.Features.Files.GetPresignedUploadUrls;
 
-public sealed record GetPresignedUploadUrlsCommand(Guid ConversationId, IReadOnlyList<GetPresignedUploadFileItems> Files)
+public sealed record GetPresignedUploadUrlsCommand(IReadOnlyList<GetPresignedUploadFileItems> Files)
     : IRequest<GetPresignedUploadUrlsResponse>;

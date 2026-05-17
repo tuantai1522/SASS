@@ -32,12 +32,5 @@ public sealed class FilesConfiguration : IEntityTypeConfiguration<File>
 
         builder.Property(x => x.UserId)
             .IsRequired();
-
-        builder
-            .HasMany(x => x.ConversationFiles)
-            .WithOne(x => x.File)
-            .HasForeignKey(x => x.FileId)
-            .OnDelete(DeleteBehavior.Cascade);
-
     }
 }

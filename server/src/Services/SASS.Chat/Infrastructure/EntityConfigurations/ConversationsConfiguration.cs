@@ -37,12 +37,5 @@ public sealed class ConversationsConfiguration : IEntityTypeConfiguration<Conver
             .WithOne(x => x.Conversation)
             .HasForeignKey(x => x.ConversationId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasMany(x => x.ConversationFiles)
-            .WithOne(x => x.Conversation)
-            .HasForeignKey(x => x.ConversationId)
-            .OnDelete(DeleteBehavior.Cascade);
-
     }
 }

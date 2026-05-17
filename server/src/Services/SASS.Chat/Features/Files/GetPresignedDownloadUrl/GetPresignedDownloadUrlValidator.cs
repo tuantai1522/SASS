@@ -6,7 +6,6 @@ internal sealed class GetPresignedDownloadUrlValidator : AbstractValidator<GetPr
 {
     public GetPresignedDownloadUrlValidator()
     {
-        RuleFor(x => x.ConversationId).NotEmpty();
         RuleFor(x => x.FileId).NotEmpty();
     }
 }

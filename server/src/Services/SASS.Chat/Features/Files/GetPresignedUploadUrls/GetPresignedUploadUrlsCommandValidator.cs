@@ -6,9 +6,6 @@ internal sealed class GetPresignedUploadUrlsCommandValidator : AbstractValidator
 {
     public GetPresignedUploadUrlsCommandValidator()
     {
-        RuleFor(x => x.ConversationId)
-            .NotEmpty();
-
         RuleFor(x => x.Files)
             .NotEmpty()
             .Must(files => files.Count <= 20)

@@ -17,8 +17,10 @@ internal sealed class GetPresignedUploadUrlsCommandHandler(
 {
     public async Task<GetPresignedUploadUrlsResponse> Handle(GetPresignedUploadUrlsCommand request, CancellationToken cancellationToken)
     {
+        var userId = userProvider.UserId;
+        
         var mediaStorage = serviceProvider.GetRequiredKeyedService<IMediaStorage>(mediaStorageOptions.Value.Provider);
-        var destinationPath = $"conversations/{request.ConversationId}";
+        var destinationPath = $"users/{userId}/documents";
 
         var responseItems = new List<PresignedUploadFileItem>(request.Files.Count);
 
@@ -33,7 +35,7 @@ internal sealed class GetPresignedUploadUrlsCommandHandler(
 
             var (key, uploadUrl) = await mediaStorage.GetPresignedUrl(destinationPath, fileName, contentType);
 
-            var file = File.Create(userProvider.UserId, request.ConversationId, fileName, key, UploadStatus.Pending);
+            var file = File.Create(userId, fileName, key, UploadStatus.Pending);
             files.Add(file);
 
             responseItems.Add(new PresignedUploadFileItem(file.Id, file.Name, file.Key, uploadUrl, contentType));

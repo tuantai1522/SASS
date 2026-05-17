@@ -6,9 +6,6 @@ internal sealed class CompleteFilesUploadCommandValidator : AbstractValidator<Co
 {
     public CompleteFilesUploadCommandValidator()
     {
-        RuleFor(x => x.ConversationId)
-            .NotEmpty();
-
         RuleFor(x => x.FileIds)
             .NotEmpty()
             .Must(x => x.Count <= 20)
