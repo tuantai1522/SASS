@@ -16,6 +16,7 @@ public sealed class File : Entity, IAggregateRoot
             UserId = userId,
             Name = name,
             Key = key,
+            ContentType = "application/octet-stream",
             UploadStatus = uploadStatus,
         };
 
@@ -24,16 +25,14 @@ public sealed class File : Entity, IAggregateRoot
 
     public string Name { get; private set; } = null!;
     public string Key { get; private set; } = null!;
+    public string ContentType { get; private set; } = null!;
     public UploadStatus UploadStatus { get; private set; }
     public long CreatedAt { get; init; } = DateTimeOffset.Now.ToUnixTimeSeconds();
+    public long? ProcessedAt { get; private set; }
+    public string? ErrorMessage { get; private set; }
 
     public Guid UserId { get; private set; }
     public User User { get; private set; } = null!;
-
-    public void UpdateUploadStatus(UploadStatus uploadStatus)
-    {
-        UploadStatus = uploadStatus;
-    }
 
     public void MarkUploaded()
     {
@@ -44,5 +43,26 @@ public sealed class File : Entity, IAggregateRoot
     public void MarkProcessing()
     {
         UploadStatus = UploadStatus.Processing;
+        ErrorMessage = null;
+        ProcessedAt = null;
+    }
+
+    public void MarkSuccess()
+    {
+        UploadStatus = UploadStatus.Success;
+        ErrorMessage = null;
+        ProcessedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    }
+
+    public void MarkFailed(string reason)
+    {
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            throw new ChatDomainException("Failure reason is required.");
+        }
+
+        UploadStatus = UploadStatus.Failed;
+        ErrorMessage = reason;
+        ProcessedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 }

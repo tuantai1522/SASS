@@ -21,6 +21,10 @@ public sealed class FilesConfiguration : IEntityTypeConfiguration<File>
             .IsRequired()
             .HasMaxLength(2048);
 
+        builder.Property(x => x.ContentType)
+            .IsRequired()
+            .HasMaxLength(256);
+
         builder.Property(x => x.UploadStatus)
             .HasConversion<string>()
             .HasMaxLength(32)
@@ -29,6 +33,12 @@ public sealed class FilesConfiguration : IEntityTypeConfiguration<File>
         builder.Property(x => x.CreatedAt)
             .HasColumnType("bigint")
             .IsRequired();
+
+        builder.Property(x => x.ProcessedAt)
+            .HasColumnType("bigint");
+
+        builder.Property(x => x.ErrorMessage)
+            .HasMaxLength(2048);
 
         builder.Property(x => x.UserId)
             .IsRequired();

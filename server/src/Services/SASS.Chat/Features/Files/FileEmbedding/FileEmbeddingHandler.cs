@@ -2,7 +2,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SASS.Chat.Features.Files.FileEmbedding;
 
-public sealed class FileEmbeddingRequestedHandler
+public sealed class FileEmbeddingHandler
 {
     public Task Handle(FileEmbeddingRequested message)
     {
