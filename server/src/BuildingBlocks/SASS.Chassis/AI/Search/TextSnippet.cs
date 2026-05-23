@@ -13,13 +13,17 @@ public sealed class TextSnippet
     [VectorStoreKey(StorageName = "id")]
     [JsonPropertyName("id")]
     public required Guid Id { get; init; }
-    
+
     /// <summary>
     /// Key from entity (this can be ProductId, ProjectId, TaskId, ...)
     /// </summary>
     [VectorStoreData(StorageName = "user_id")]
     [JsonPropertyName("user_id")]
     public required Guid UserId { get; init; }
+
+    [VectorStoreData(StorageName = "file_id")]
+    [JsonPropertyName("file_id")]
+    public required Guid FileId { get; init; }
 
     [VectorStoreData(IsFullTextIndexed = true, StorageName = "content")]
     [JsonPropertyName("content")]
@@ -28,7 +32,7 @@ public sealed class TextSnippet
     [VectorStoreVector(VectorDimensions, DistanceFunction = VectorDistanceFunction, StorageName = "embedding")]
     [JsonPropertyName("embedding")]
     public ReadOnlyMemory<float> Vector { get; init; }
-    
+
     /// <summary>
     /// From documents, chunk into multiple smaller documents, every document is an index
     /// </summary>

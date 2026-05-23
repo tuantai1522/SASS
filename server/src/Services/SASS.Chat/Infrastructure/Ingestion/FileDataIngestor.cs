@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.AI;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.VectorData;
 using SASS.Chassis.AI.Ingestion;
 using SASS.Chassis.AI.Search;
@@ -21,8 +23,9 @@ internal sealed class FileDataIngestor(
 
         var record = new TextSnippet
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             UserId = data.UserId,
+            FileId = data.FileId,
             Content = data.Content,
             Vector = embeddings,
             Index = data.Index,
