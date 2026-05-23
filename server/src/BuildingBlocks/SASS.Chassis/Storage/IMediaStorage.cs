@@ -10,9 +10,14 @@ public interface IMediaStorage
     /// Returns object key and upload url.
     /// </summary>
     Task<(string Key, string Url)> GetPresignedUrl(string destinationPath, string fileName, string contentType);
-    
+
     /// <summary>
     /// Method to get "GET" presigned URl so client view this file
     /// </summary>
     Task<string> GetPresignedUrl(string key);
+
+    /// <summary>
+    /// Opens a readable stream for the stored object. Caller owns the returned stream and must dispose it.
+    /// </summary>
+    Task<Stream> OpenReadAsync(string key, CancellationToken cancellationToken = default);
 }

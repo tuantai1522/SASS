@@ -55,4 +55,26 @@ public sealed class CloudflareR2MediaStorage(IOptions<CloudflareR2Options> cloud
             throw new InvalidOperationException("Failed to generate Cloudflare R2 view presigned URL.", ex);
         }
     }
+
+    public async Task<Stream> OpenReadAsync(string key, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var response = await amazonS3.GetObjectAsync(new GetObjectRequest
+            {
+                BucketName = cloudflareR2Options.Value.BucketName,
+                Key = key
+            }, cancellationToken);
+
+            return new OwnedStream(response.ResponseStream, response);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to open Cloudflare R2 object stream for key '{key}'.", ex);
+        }
+    }
 }
