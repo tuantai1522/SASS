@@ -9,14 +9,14 @@ public sealed class File : Entity, IAggregateRoot
     {
     }
 
-    public static File Create(Guid userId, string name, string key, UploadStatus uploadStatus)
+    public static File Create(Guid userId, string name, string key, string contentType, UploadStatus uploadStatus)
     {
         var file = new File
         {
             UserId = userId,
             Name = name,
             Key = key,
-            ContentType = "application/octet-stream",
+            ContentType = contentType,
             UploadStatus = uploadStatus,
         };
 
