@@ -13,9 +13,7 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
         Guid ownerId,
         string code,
         string title,
-        string? description,
-        IReadOnlyList<Guid> memberIds,
-        IReadOnlyList<Guid> leaderIds)
+        string? description)
     {
         var project = new Project
         {
@@ -26,9 +24,6 @@ public sealed class Project : Entity, IAggregateRoot, ISoftDelete
             NextTaskSequence = 1,
             CreatedAt = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
-
-        project.AddMembers(memberIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Member)).ToList());
-        project.AddMembers(leaderIds.Select(memberId => ProjectMember.Create(project.Id, memberId, ProjectMemberRole.Leader)).ToList());
 
         return project;
     }

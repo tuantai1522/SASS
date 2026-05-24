@@ -23,28 +23,11 @@ internal sealed class CreateProjectCommandHandler(
             throw new ConflictException("Project code already exists for current owner.");
         }
 
-        var memberIds = request.MemberIds;
-        var leaderIds = request.LeaderIds;
-
-        var participantIds = memberIds
-            .Concat(leaderIds)
-            .Append(userProvider.UserId)
-            .Distinct()
-            .ToArray();
-
-        var existingParticipantsCount = await dbContext.Users
-            .CountAsync(x => participantIds.Contains(x.Id), cancellationToken);
-
-        if (existingParticipantsCount != participantIds.Length)
-        {
-            throw new NotFoundException("One or more project participants were not found.");
-        }
-
-        // 1. Add from request
-        var project = Project.Create(userProvider.UserId, request.Code, request.Title, request.Description, request.MemberIds, request.LeaderIds);
+        // 1. Create project
+        var project = Project.Create(userProvider.UserId, request.Code, request.Title, request.Description);
 
         // 2. Add current user as leader
-        project.AddMembers([ProjectMember.Create(project.Id, userProvider.UserId,  ProjectMemberRole.Leader)]);
+        project.AddMembers([ProjectMember.Create(project.Id, userProvider.UserId, ProjectMemberRole.Leader)]);
 
         await dbContext.Projects.AddAsync(project, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
