@@ -8,7 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SASS.Chat.Infrastructure.Ingestion;
 
-internal sealed class FileDataIngestor(
+public sealed class FileDataIngestor(
     IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
     VectorStoreCollection<Guid, TextSnippet> vectorCollection) : IIngestionSource<FileDataIngestion>
 {

@@ -28,6 +28,6 @@ internal sealed class CompleteFilesUploadCommandHandler(
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CompleteFilesUploadResponse(files.Select(x => x.Id).ToArray());
+        return new CompleteFilesUploadResponse([.. files.Select(x => x.Id)]);
     }
 }

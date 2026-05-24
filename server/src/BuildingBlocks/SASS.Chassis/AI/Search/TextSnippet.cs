@@ -19,11 +19,11 @@ public sealed class TextSnippet
     /// </summary>
     [VectorStoreData(StorageName = "user_id")]
     [JsonPropertyName("user_id")]
-    public required Guid UserId { get; init; }
+    public required string UserId { get; init; }
 
     [VectorStoreData(StorageName = "file_id")]
     [JsonPropertyName("file_id")]
-    public required Guid FileId { get; init; }
+    public required string FileId { get; init; }
 
     [VectorStoreData(IsFullTextIndexed = true, StorageName = "content")]
     [JsonPropertyName("content")]
