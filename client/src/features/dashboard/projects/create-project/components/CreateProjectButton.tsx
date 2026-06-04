@@ -27,7 +27,8 @@ import {
 } from "../validators.ts";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { normalizeApiError } from "@/lib";
+import { normalizeApiError, queryKeys } from "@/lib";
+import { queryClient } from "@/router.tsx";
 
 export function CreateProjectButton() {
   const navigate = useNavigate();
@@ -53,6 +54,10 @@ export function CreateProjectButton() {
           position: "bottom-right",
         },
       );
+
+      await queryClient.refetchQueries({
+        queryKey: queryKeys.projects.list(),
+      });
 
       form.reset();
 

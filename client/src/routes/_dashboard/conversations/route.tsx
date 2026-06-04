@@ -23,7 +23,7 @@ function ConversationsPage() {
           <CreateConversationButton />
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4">
+        <div className="flex-1 overflow-y-auto px-2">
           <ConversationList />
         </div>
       </div>

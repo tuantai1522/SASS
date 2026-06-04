@@ -6,13 +6,17 @@ export const queryKeys = {
     me: () => ["auth", "me"] as const,
   },
   conversations: {
+    all: ["conversations"] as const,
+    lists: () => [...queryKeys.conversations.all, "list"] as const,
     list: (params: GetConversationsRequest) =>
-      ["conversations", "list", params] as const,
+      [...queryKeys.conversations.lists(), params] as const,
     detail: (conversationId: string) =>
       ["conversations", "detail", conversationId] as const,
   },
+  projects: {
+    list: () => ["projects", "list"] as const,
+  },
   messages: {
-    list: (params: GetMessagesRequest) =>
-      ["messages", "list", params] as const,
+    list: (params: GetMessagesRequest) => ["messages", "list", params] as const,
   },
 };

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import LogoIcon from "@/assets/logo.png";
 import { CreateProjectButton } from "@/features/dashboard/projects/create-project";
+import { ProjectList } from "@/features/dashboard/projects/get-projects";
 
 export const Route = createFileRoute("/_dashboard/projects")({
   component: ProjectsPage,
@@ -20,6 +21,10 @@ function ProjectsPage() {
         {/*Body*/}
         <div className="px-4 py-2">
           <CreateProjectButton />
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-2">
+          <ProjectList />
         </div>
       </div>
       <div className="flex min-w-0 flex-1 flex-col h-full">

@@ -26,8 +26,9 @@ import {
 } from "../validators.ts";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { normalizedName, normalizeApiError } from "@/lib";
+import { normalizedName, normalizeApiError, queryKeys } from "@/lib";
 import { useWatch } from "react-hook-form";
+import { queryClient } from "@/router.tsx";
 
 export function CreateConversationButton() {
   const navigate = useNavigate();
@@ -50,11 +51,16 @@ export function CreateConversationButton() {
     ...createConversationOptions(),
     onSuccess: async (response) => {
       setOpen(false);
-      form.reset();
 
       toast.success(`Create conversation "${transformedName}" successfully`, {
         position: "bottom-right",
       });
+
+      await queryClient.refetchQueries({
+        queryKey: queryKeys.conversations.lists(),
+      });
+
+      form.reset();
 
       await navigate({
         to: "/conversations/$conversationId",
