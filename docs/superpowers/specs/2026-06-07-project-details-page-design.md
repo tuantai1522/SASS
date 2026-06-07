@@ -6,10 +6,11 @@ Build out the `/projects/$projectId` page so it becomes a project workspace shel
 
 The page will:
 
-- Render a compact project header with key summary fields.
+- Render a lightweight project header with only essential fields.
 - Provide two tabs:
   - `Project details`
   - `Project tasks`
+- Use the shared shadcn `Tabs` component to switch between those tabs.
 - Reuse the existing project tasks table without changing its behavior.
 
 The backend already exposes `GetProjectById`, so the main implementation work is wiring that response into the client and shaping the page layout around it.
@@ -36,28 +37,37 @@ The backend already exposes `GetProjectById`, so the main implementation work is
 
 ### Header
 
-The top of the page should show the project identity and core status at a glance:
+The top of the page should stay intentionally minimal and focus on project identity:
 
 - Project code and title
 - Description if present
-- Current user role in the project
-- Progress percentage
-- Total tasks
-- Completed tasks
-- Created date
+- A small secondary summary line with only the most useful high-level stats
+
+Recommended header content:
+
+- `[CODE] - Title`
+- Description or a simple empty-state fallback
+- A short summary row such as:
+  - progress
+  - total tasks
+  - completed tasks
+
+Role and created date should move to the details tab instead of crowding the header.
 
 This header should stay simple and informational, not action-heavy.
 
 ### Tabs
 
-The page body should use two tabs:
+The page body should use the shared `Tabs` component from `client/src/features/shared/components/ui/tabs.tsx`.
+
+The tab strip should contain two items:
 
 #### Project details
 
 This tab is the project overview tab and will show:
 
 - Full description or an empty-state fallback
-- Summary cards or compact stats for:
+- Secondary metadata and compact stats for:
   - progress
   - total tasks
   - completed tasks
@@ -117,8 +127,8 @@ Update the project route so it:
 
 1. Reads `projectId` from params
 2. Fetches project details
-3. Renders the project header
-4. Renders the two-tab layout
+3. Renders the minimal project header
+4. Uses `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` to render the two-tab layout
 5. Mounts `TasksTable` inside the `Project tasks` tab
 
 ## Error Handling
@@ -136,3 +146,4 @@ No testing work is included in this scope by explicit user direction.
 - Preserve the current project tasks feature as-is.
 - Prefer adapting the UI to the existing backend response over expanding backend scope unless a small naming cleanup materially improves maintainability.
 - Keep the tab and header UI straightforward so future additions such as files can slot into the details tab without restructuring the page.
+- Prefer the default tab experience to be obvious and low-friction, with `Project details` as the overview tab and `Project tasks` as the work tab.
