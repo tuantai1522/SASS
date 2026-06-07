@@ -10,9 +10,9 @@ namespace SASS.Chat.Features.Projects.GetProjectTasks;
 internal sealed class GetProjectTasksQueryHandler(
     ChatDbContext dbContext,
     IUserProvider userProvider)
-    : IRequestHandler<GetProjectTasksQuery, PagedResult<GetProjectTasksItemResponse>>
+    : IRequestHandler<GetProjectTasksQuery, PagedResult<GetProjectTasksResponse>>
 {
-    public async Task<PagedResult<GetProjectTasksItemResponse>> Handle(GetProjectTasksQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<GetProjectTasksResponse>> Handle(GetProjectTasksQuery request, CancellationToken cancellationToken)
     {
         var userId = userProvider.UserId;
 
@@ -46,55 +46,31 @@ internal sealed class GetProjectTasksQueryHandler(
 
         var totalItems = await query.LongCountAsync(cancellationToken);
 
-        var rawItems = await query
+        var items = await query
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
-            .Select(x => new
-            {
-                x.Id,
-                x.Code,
-                x.Title,
-                x.Description,
-                
-                x.StatusId,
-                StatusName = x.Status.Name,
-                
-                x.PriorityId,
-                PriorityName = x.Priority.Name,
-                
-                x.AssigneeId,
-                AssigneeName = x.Assignee != null ? x.Assignee.DisplayName : null,
-                
-                x.StartDate,
-                x.DueDate,
-                x.CreatedAt
-            })
-            .ToListAsync(cancellationToken);
-
-        var items = rawItems
-            .Select(x => new GetProjectTasksItemResponse
+            .Select(x => new GetProjectTasksResponse
             {
                 Id = x.Id,
                 Code = x.Code.ToString("D4"),
                 Title = x.Title,
-                Description = x.Description,
                 
                 StatusId = x.StatusId,
-                StatusName = x.StatusName,
+                StatusName = x.Status.Name,
                 
                 PriorityId = x.PriorityId,
-                PriorityName = x.PriorityName,
+                PriorityName = x.Priority.Name,
                 
                 AssigneeId = x.AssigneeId,
-                AssigneeName = x.AssigneeName,
+                AssigneeName = x.Assignee != null ? x.Assignee.DisplayName : null,
                 
                 StartDate = x.StartDate,
                 DueDate = x.DueDate,
                 CreatedAt = x.CreatedAt
             })
-            .ToList();
+            .ToListAsync(cancellationToken);
 
-        return new PagedResult<GetProjectTasksItemResponse>(items, request.Page, request.PageSize, totalItems);
+        return new PagedResult<GetProjectTasksResponse>(items, request.Page, request.PageSize, totalItems);
     }
 
     private static IQueryable<TaskEntity> ApplySearch(IQueryable<TaskEntity> query, string? search)

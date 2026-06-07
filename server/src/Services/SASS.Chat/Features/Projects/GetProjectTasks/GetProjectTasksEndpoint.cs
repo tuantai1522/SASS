@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SASS.Chat.Features.Projects.GetProjectTasks;
 
-public sealed class GetProjectTasksEndpoint : IEndpoint<Ok<PagedResult<GetProjectTasksItemResponse>>, Guid, GetProjectTasksQuery, ISender>
+public sealed class GetProjectTasksEndpoint : IEndpoint<Ok<PagedResult<GetProjectTasksResponse>>, Guid, GetProjectTasksQuery, ISender>
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -14,10 +14,10 @@ public sealed class GetProjectTasksEndpoint : IEndpoint<Ok<PagedResult<GetProjec
             .WithDescription("Get project tasks with normal pagination")
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization()
-            .Produces<PagedResult<GetProjectTasksItemResponse>>();
+            .Produces<PagedResult<GetProjectTasksResponse>>();
     }
 
-    public async Task<Ok<PagedResult<GetProjectTasksItemResponse>>> HandleAsync(
+    public async Task<Ok<PagedResult<GetProjectTasksResponse>>> HandleAsync(
         Guid projectId,
         [FromBody] GetProjectTasksQuery query,
         ISender sender,

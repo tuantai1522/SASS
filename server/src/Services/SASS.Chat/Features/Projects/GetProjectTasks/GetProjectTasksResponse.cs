@@ -1,11 +1,10 @@
 namespace SASS.Chat.Features.Projects.GetProjectTasks;
 
-public sealed class GetProjectTasksItemResponse
+public sealed class GetProjectTasksResponse
 {
     public Guid Id { get; init; }
     public string Code { get; init; } = null!;
     public string Title { get; init; } = null!;
-    public string? Description { get; init; }
     
     public Guid StatusId { get; init; }
     public string StatusName { get; init; } = null!;
@@ -21,5 +20,6 @@ public sealed class GetProjectTasksItemResponse
     
     public DateOnly? StartDate { get; init; }
     public DateOnly? DueDate { get; init; }
+
     public long CreatedAt { get; init; }
 }

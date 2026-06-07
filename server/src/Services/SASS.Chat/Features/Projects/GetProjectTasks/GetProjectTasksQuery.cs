@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SASS.Chat.Features.Projects.GetProjectTasks;
 
-public sealed class GetProjectTasksQuery : PagedRequest, IRequest<PagedResult<GetProjectTasksItemResponse>>
+public sealed class GetProjectTasksQuery : PagedRequest, IRequest<PagedResult<GetProjectTasksResponse>>
 {
     public Guid ProjectId { get; init; }
 
