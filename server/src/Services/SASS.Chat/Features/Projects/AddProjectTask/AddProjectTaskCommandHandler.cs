@@ -5,8 +5,9 @@ using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chassis.Utilities.Guards;
 using SASS.Chat.Infrastructure;
 using ProjectTask = SASS.Chat.Domain.AggregatesModel.Projects.Task;
-using TaskStatus = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
 using TaskPriority = SASS.Chat.Domain.AggregatesModel.Projects.TaskPriority;
+using TaskStatus = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
+using TaskType = SASS.Chat.Domain.AggregatesModel.Projects.TaskType;
 
 namespace SASS.Chat.Features.Projects.AddProjectTask;
 
@@ -31,7 +32,12 @@ internal sealed class AddProjectTaskCommandHandler(
         var priorityExists = await dbContext.TaskPriorities
             .AnyAsync(x => x.Id == request.PriorityId, cancellationToken);
 
-        Guard.Against.NotFound<TaskPriority>(priorityExists, request.StatusId);
+        Guard.Against.NotFound<TaskPriority>(priorityExists, request.PriorityId);
+
+        var typeExists = await dbContext.TaskTypes
+            .AnyAsync(x => x.Id == request.TypeId, cancellationToken);
+
+        Guard.Against.NotFound<TaskType>(typeExists, request.TypeId);
         
         for (var attempt = 0; attempt < MaxTaskCodeGenerationRetries; attempt++)
         {
@@ -68,6 +74,7 @@ internal sealed class AddProjectTaskCommandHandler(
                 request.Description,
                 request.StatusId,
                 request.PriorityId,
+                request.TypeId,
                 request.AssigneeId,
                 request.StartDate,
                 request.DueDate);

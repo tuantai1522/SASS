@@ -35,6 +35,7 @@ public sealed class UpdateProjectTaskCommandValidator : AbstractValidator<Update
 
             case UpdateProjectTaskKey.Status:
             case UpdateProjectTaskKey.Priority:
+            case UpdateProjectTaskKey.Type:
                 ValidateRequiredGuid(command.Value, context);
                 break;
 

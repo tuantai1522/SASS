@@ -11,7 +11,7 @@ internal sealed class GetTaskStatusesQueryHandler(
     {
         var response = await dbContext.TaskStatuses
             .OrderBy(i => i.Order)
-            .Select(x => new GetTaskStatusesResponse(x.Id, x.Name, x.Order))
+            .Select(x => new GetTaskStatusesResponse(x.Id, x.Name, x.Key, x.ColorToken, x.IconKey, x.Order))
             .ToListAsync(cancellationToken);
 
         return response;

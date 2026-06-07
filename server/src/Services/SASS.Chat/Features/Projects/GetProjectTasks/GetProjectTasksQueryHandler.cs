@@ -41,6 +41,11 @@ internal sealed class GetProjectTasksQueryHandler(
             query = query.Where(x => request.PriorityIds.Contains(x.PriorityId));
         }
 
+        if (request.TypeIds.Count > 0)
+        {
+            query = query.Where(x => request.TypeIds.Contains(x.TypeId));
+        }
+
         query = ApplySearch(query, request.Search);
         query = ApplyOrdering(query, request.OrderBy, request.Order);
 
@@ -57,9 +62,21 @@ internal sealed class GetProjectTasksQueryHandler(
                 
                 StatusId = x.StatusId,
                 StatusName = x.Status.Name,
+                StatusKey = x.Status.Key,
+                StatusColorToken = x.Status.ColorToken,
+                StatusIconKey = x.Status.IconKey,
                 
                 PriorityId = x.PriorityId,
                 PriorityName = x.Priority.Name,
+                PriorityKey = x.Priority.Key,
+                PriorityColorToken = x.Priority.ColorToken,
+                PriorityIconKey = x.Priority.IconKey,
+
+                TypeId = x.TypeId,
+                TypeName = x.Type.Name,
+                TypeKey = x.Type.Key,
+                TypeColorToken = x.Type.ColorToken,
+                TypeIconKey = x.Type.IconKey,
                 
                 AssigneeId = x.AssigneeId,
                 AssigneeName = x.Assignee != null ? x.Assignee.DisplayName : null,

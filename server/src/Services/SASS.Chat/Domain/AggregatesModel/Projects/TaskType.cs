@@ -1,8 +1,8 @@
 namespace SASS.Chat.Domain.AggregatesModel.Projects;
 
-public sealed class TaskPriority : Entity
+public sealed class TaskType : Entity
 {
-    private TaskPriority()
+    private TaskType()
     {
     }
 
@@ -13,6 +13,6 @@ public sealed class TaskPriority : Entity
     public string ColorToken { get; private init; } = null!;
 
     public string IconKey { get; private init; } = null!;
-    
+
     public int Order { get; private init; }
 }

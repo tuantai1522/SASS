@@ -19,6 +19,9 @@ internal sealed class AddProjectTaskCommandValidator : AbstractValidator<AddProj
         RuleFor(x => x.PriorityId)
             .NotEmpty();
 
+        RuleFor(x => x.TypeId)
+            .NotEmpty();
+
         RuleFor(x => x)
             .Must(x => x.StartDate is null || x.DueDate is null || x.StartDate <= x.DueDate)
             .WithMessage("StartDate must be less than or equal to DueDate.");

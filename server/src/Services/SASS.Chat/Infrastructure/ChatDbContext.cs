@@ -3,6 +3,7 @@ using SASS.Chassis.Repository;
 using File = SASS.Chat.Domain.AggregatesModel.Files.File;
 using ProjectTaskStatus = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
 using Task = SASS.Chat.Domain.AggregatesModel.Projects.Task;
+using TaskType = SASS.Chat.Domain.AggregatesModel.Projects.TaskType;
 
 namespace SASS.Chat.Infrastructure;
 
@@ -20,6 +21,7 @@ public sealed class ChatDbContext(DbContextOptions<ChatDbContext> options) : DbC
     public DbSet<Task> Tasks => Set<Task>();
     public DbSet<ProjectTaskStatus> TaskStatuses => Set<ProjectTaskStatus>();
     public DbSet<TaskPriority> TaskPriorities => Set<TaskPriority>();
+    public DbSet<TaskType> TaskTypes => Set<TaskType>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

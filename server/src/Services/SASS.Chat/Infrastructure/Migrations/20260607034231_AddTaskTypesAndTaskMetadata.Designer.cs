@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SASS.Chat.Infrastructure;
@@ -11,9 +12,11 @@ using SASS.Chat.Infrastructure;
 namespace SASS.Chat.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607034231_AddTaskTypesAndTaskMetadata")]
+    partial class AddTaskTypesAndTaskMetadata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,12 +386,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnType("character varying(128)")
                         .HasColumnName("icon_key");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("key");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -401,10 +398,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_task_priorities");
-
-                    b.HasIndex("Key")
-                        .IsUnique()
-                        .HasDatabaseName("ix_task_priorities_key");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -422,7 +415,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("12fff476-3636-4316-a31b-55d8ad9ee545"),
                             ColorToken = "success",
                             IconKey = "arrow-down",
-                            Key = "Low",
                             Name = "Low",
                             Order = 1
                         },
@@ -431,7 +423,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("4a034f3c-dc71-4582-acb9-af1bbca483d1"),
                             ColorToken = "warning",
                             IconKey = "arrow-right",
-                            Key = "Medium",
                             Name = "Medium",
                             Order = 2
                         },
@@ -440,7 +431,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("9c1bac75-134c-4155-b0a9-663631db4302"),
                             ColorToken = "danger",
                             IconKey = "arrow-up",
-                            Key = "High",
                             Name = "High",
                             Order = 3
                         });
@@ -465,12 +455,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnType("character varying(128)")
                         .HasColumnName("icon_key");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("key");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -483,10 +467,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_task_statuses");
-
-                    b.HasIndex("Key")
-                        .IsUnique()
-                        .HasDatabaseName("ix_task_statuses_key");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -504,7 +484,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("54a3f5eb-3c1b-4aa6-9154-ee9164e65862"),
                             ColorToken = "neutral",
                             IconKey = "circle-help",
-                            Key = "Todo",
                             Name = "Todo",
                             Order = 1
                         },
@@ -513,7 +492,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("ce0b6071-db6d-4820-8a69-095322ccbe3d"),
                             ColorToken = "info",
                             IconKey = "timer",
-                            Key = "InProgress",
                             Name = "InProgress",
                             Order = 2
                         },
@@ -522,7 +500,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("02b1ee43-e224-495c-a2cb-53684b30bcb2"),
                             ColorToken = "warning",
                             IconKey = "message-square-text",
-                            Key = "Review",
                             Name = "Review",
                             Order = 3
                         },
@@ -531,7 +508,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("853bac26-1dc9-4662-8658-6864faa1a9ca"),
                             ColorToken = "success",
                             IconKey = "check-circle-2",
-                            Key = "Done",
                             Name = "Done",
                             Order = 4
                         });
@@ -556,12 +532,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                         .HasColumnType("character varying(128)")
                         .HasColumnName("icon_key");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("key");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -574,10 +544,6 @@ namespace SASS.Chat.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_task_types");
-
-                    b.HasIndex("Key")
-                        .IsUnique()
-                        .HasDatabaseName("ix_task_types_key");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -595,7 +561,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("aec36fdf-8f53-4a01-a34f-d8ae107e6496"),
                             ColorToken = "info",
                             IconKey = "sparkles",
-                            Key = "Feature",
                             Name = "Feature",
                             Order = 1
                         },
@@ -604,7 +569,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("b6e8b4dd-62b4-4fb7-813f-07e25e035536"),
                             ColorToken = "danger",
                             IconKey = "bug",
-                            Key = "Bug",
                             Name = "Bug",
                             Order = 2
                         },
@@ -613,7 +577,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("00c83a8f-e287-4343-84de-2d627dad3f41"),
                             ColorToken = "success",
                             IconKey = "trending-up",
-                            Key = "Improvement",
                             Name = "Improvement",
                             Order = 3
                         },
@@ -622,7 +585,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("bc5b36da-b555-47f7-bf9a-a7d8104f118e"),
                             ColorToken = "neutral",
                             IconKey = "file-text",
-                            Key = "Documentation",
                             Name = "Documentation",
                             Order = 4
                         },
@@ -631,7 +593,6 @@ namespace SASS.Chat.Infrastructure.Migrations
                             Id = new Guid("bfeb516d-5146-48b1-87cf-2d1c5bacd7fa"),
                             ColorToken = "warning",
                             IconKey = "list-todo",
-                            Key = "Task",
                             Name = "Task",
                             Order = 5
                         });

@@ -11,7 +11,7 @@ internal sealed class GetTaskPrioritiesQueryHandler(
     {
         var response = await dbContext.TaskPriorities
             .OrderBy(i => i.Order)
-            .Select(x => new GetTaskPrioritiesResponse(x.Id, x.Name, x.Order))
+            .Select(x => new GetTaskPrioritiesResponse(x.Id, x.Name, x.Key, x.ColorToken, x.IconKey, x.Order))
             .ToListAsync(cancellationToken);
 
         return response;

@@ -7,6 +7,12 @@ public sealed class TaskStatus : Entity
     }
 
     public string Name { get; private init; } = null!;
+
+    public string Key { get; private init; } = null!;
+
+    public string ColorToken { get; private init; } = null!;
+
+    public string IconKey { get; private init; } = null!;
     
     public int Order { get; private init; }
 }

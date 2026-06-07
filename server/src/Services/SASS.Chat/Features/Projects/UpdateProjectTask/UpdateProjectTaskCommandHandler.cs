@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using SASS.Chassis.Security.UserRetrieval;
 using SASS.Chassis.Utilities.Guards;
 using SASS.Chat.Infrastructure;
-using TaskStatus = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
 using TaskPriority = SASS.Chat.Domain.AggregatesModel.Projects.TaskPriority;
+using TaskStatus = SASS.Chat.Domain.AggregatesModel.Projects.TaskStatus;
+using TaskType = SASS.Chat.Domain.AggregatesModel.Projects.TaskType;
 namespace SASS.Chat.Features.Projects.UpdateProjectTask;
 
 internal sealed class UpdateProjectTaskCommandHandler(
@@ -89,6 +90,21 @@ internal sealed class UpdateProjectTaskCommandHandler(
                 
                 task.ChangePriority(Guid.Parse(request.Value));
                 
+                break;
+
+            case UpdateProjectTaskKey.Type:
+                if (!projectAccess.IsLeader)
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to update this task.");
+                }
+
+                var typeExists = await dbContext.TaskTypes
+                    .AnyAsync(x => x.Id == Guid.Parse(request.Value), cancellationToken);
+
+                Guard.Against.NotFound<TaskType>(typeExists, Guid.Parse(request.Value));
+
+                task.ChangeType(Guid.Parse(request.Value));
+
                 break;
             
             case UpdateProjectTaskKey.StartDate:

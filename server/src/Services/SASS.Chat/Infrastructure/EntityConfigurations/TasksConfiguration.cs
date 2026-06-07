@@ -32,6 +32,9 @@ public sealed class TasksConfiguration : IEntityTypeConfiguration<Task>
         builder.Property(x => x.PriorityId)
             .IsRequired();
 
+        builder.Property(x => x.TypeId)
+            .IsRequired();
+
         builder.Property(x => x.StartDate)
             .HasColumnType("date")
             .IsRequired(false);
@@ -67,6 +70,9 @@ public sealed class TasksConfiguration : IEntityTypeConfiguration<Task>
         builder.HasIndex(x => x.PriorityId)
             .HasDatabaseName("ix_tasks_priority_id");
 
+        builder.HasIndex(x => x.TypeId)
+            .HasDatabaseName("ix_tasks_type_id");
+
         builder
             .HasOne(x => x.Project)
             .WithMany(x => x.Tasks)
@@ -89,6 +95,12 @@ public sealed class TasksConfiguration : IEntityTypeConfiguration<Task>
             .HasOne(x => x.Priority)
             .WithMany()
             .HasForeignKey(x => x.PriorityId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(x => x.Type)
+            .WithMany()
+            .HasForeignKey(x => x.TypeId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

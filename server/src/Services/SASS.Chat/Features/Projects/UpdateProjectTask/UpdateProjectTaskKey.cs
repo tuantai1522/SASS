@@ -7,6 +7,7 @@ public enum UpdateProjectTaskKey
     Assignee,
     Status,
     Priority,
+    Type,
     StartDate,
     DueDate
 }

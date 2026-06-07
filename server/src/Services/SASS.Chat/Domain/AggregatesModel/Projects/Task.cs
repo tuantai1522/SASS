@@ -13,6 +13,7 @@ public sealed class Task : Entity, ISoftDelete
         string? description,
         Guid statusId,
         Guid priorityId,
+        Guid typeId,
         Guid? assigneeId,
         DateOnly? startDate,
         DateOnly? dueDate)
@@ -25,6 +26,7 @@ public sealed class Task : Entity, ISoftDelete
             Description = description,
             StatusId = statusId,
             PriorityId = priorityId,
+            TypeId = typeId,
             AssigneeId = assigneeId,
             StartDate = startDate,
             DueDate = dueDate,
@@ -49,6 +51,9 @@ public sealed class Task : Entity, ISoftDelete
     public Guid PriorityId { get; private set; }
     public TaskPriority Priority { get; private set; } = null!;
 
+    public Guid TypeId { get; private set; }
+    public TaskType Type { get; private set; } = null!;
+
     public DateOnly? StartDate { get; private set; }
     public DateOnly? DueDate { get; private set; }
     public long CreatedAt { get; private init; }
@@ -63,6 +68,11 @@ public sealed class Task : Entity, ISoftDelete
     public void ChangePriority(Guid priorityId)
     {
         PriorityId = priorityId;
+    }
+
+    public void ChangeType(Guid typeId)
+    {
+        TypeId = typeId;
     }
 
     public void ChangeStatus(Guid statusId)

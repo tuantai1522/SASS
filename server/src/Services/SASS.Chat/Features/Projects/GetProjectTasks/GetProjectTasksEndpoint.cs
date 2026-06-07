@@ -33,6 +33,7 @@ public sealed class GetProjectTasksEndpoint : IEndpoint<Ok<PagedResult<GetProjec
             StatusIds = query.StatusIds,
             AssigneeIds = query.AssigneeIds,
             PriorityIds = query.PriorityIds,
+            TypeIds = query.TypeIds,
             Search = query.Search,
         };
         

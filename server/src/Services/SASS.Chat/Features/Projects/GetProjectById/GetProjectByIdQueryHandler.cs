@@ -25,10 +25,10 @@ internal sealed class GetProjectByIdQueryHandler(
                         .Select(m => m.Role.ToString())
                         .FirstOrDefault() ?? nameof(ProjectMemberRole.Member),
                     ProjectProgressCalculator.Calculate(
-                        x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done)),
+                        x.Tasks.Count(t => !t.IsDeleted && t.Status.Key == nameof(TaskStatusKey.Done)),
                         x.Tasks.Count(t => !t.IsDeleted)),
                     x.Tasks.Count(t => !t.IsDeleted),
-                    x.Tasks.Count(t => !t.IsDeleted && t.Status.Name == nameof(TaskStatusKey.Done))))
+                    x.Tasks.Count(t => !t.IsDeleted && t.Status.Key == nameof(TaskStatusKey.Done))))
                 .FirstOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(response, request.ProjectId);

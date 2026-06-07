@@ -14,6 +14,8 @@ public sealed class GetProjectTasksQuery : PagedRequest, IRequest<PagedResult<Ge
 
     public IReadOnlyList<Guid> PriorityIds { get; init; } = [];
 
+    public IReadOnlyList<Guid> TypeIds { get; init; } = [];
+
     public string? Search { get; init; }
 
     [JsonConverter(typeof(JsonStringEnumConverter<GetProjectTasksOrderBy>))]

@@ -17,5 +17,8 @@ internal sealed class GetProjectTasksQueryValidator : AbstractValidator<GetProje
 
         RuleForEach(x => x.PriorityIds)
             .NotNull();
+
+        RuleForEach(x => x.TypeIds)
+            .NotNull();
     }
 }
