@@ -17,7 +17,7 @@ export function TasksTable({ projectId }: TasksTableProps) {
     }),
   );
 
-  const columns = useMemo(() => getTasksTableColumns({}), []);
+  const columns = useMemo(() => getTasksTableColumns(), []);
 
   const { table } = useDataTable({
     data: data?.items ?? [],

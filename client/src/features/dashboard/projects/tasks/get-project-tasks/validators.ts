@@ -1,7 +1,5 @@
 ﻿import { PAGINATION } from "@/lib";
 import { z } from "zod";
-import type { GetProjectTasksRequest } from "./types";
-
 const getProjectTasksOrderByValues = ["dueDate", "title", "priority"] as const;
 
 export const getProjectTasksOrderBySchema = z.enum(
@@ -21,6 +19,7 @@ export const getProjectTasksRequestSchema = z.object({
   statusIds: z.array(z.uuid()).default([]),
   assigneeIds: z.array(z.uuid()).default([]),
   priorityIds: z.array(z.uuid()).default([]),
+  typeIds: z.array(z.uuid()).default([]),
 
   search: z.string().optional(),
 
@@ -42,4 +41,5 @@ export const defaultProjectTasksParams =
     statusIds: [],
     assigneeIds: [],
     priorityIds: [],
+    typeIds: [],
   });

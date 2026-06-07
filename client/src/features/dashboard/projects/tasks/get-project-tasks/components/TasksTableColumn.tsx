@@ -13,11 +13,9 @@ import {
 } from "@/features/shared";
 import type { GetProjectTasksResponse } from "../types";
 import { formatUnixTimestampToDate } from "@/lib";
-import { getPriorityMeta, getStatusMeta } from "../../../utils";
+import { getPriorityMeta, getStatusMeta, getTypeMeta } from "../../../utils";
 
-interface GetTasksTableColumnsProps {}
-
-export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<GetProjectTasksResponse>[] {
+export function getTasksTableColumns(): ColumnDef<GetProjectTasksResponse>[] {
   return [
     {
       id: "select",
@@ -62,10 +60,15 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
         <DataTableColumnHeader column={column} label="Title" />
       ),
       cell: ({ row }) => {
+        const typeMeta = getTypeMeta(row.original.typeKey);
+
+        const TypeIcon = typeMeta?.icon;
+
         return (
           <div className="grid min-w-0 grid-cols-[auto_1fr] items-center gap-2">
             <Badge variant="outline" className="shrink-0">
-              Feature
+              {TypeIcon ? <TypeIcon className={typeMeta.className} /> : null}
+              {row.original.typeName}
             </Badge>
 
             <span className="min-w-0 truncate font-medium">
@@ -83,8 +86,8 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
       header: ({ column }) => (
         <DataTableColumnHeader column={column} label="Status" />
       ),
-      cell: ({ cell }) => {
-        const statusMeta = getStatusMeta(cell.getValue<string>());
+      cell: ({ row }) => {
+        const statusMeta = getStatusMeta(row.original.statusKey);
 
         if (!statusMeta) return null;
 
@@ -94,7 +97,7 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
           <div className="grid min-w-0 grid-cols-[auto_1fr] items-center gap-2">
             <Badge variant="outline">
               <StatusIcon className={statusMeta.className} />
-              <span>{cell.getValue<string>()}</span>
+              <span>{row.original.statusName}</span>
             </Badge>
           </div>
         );
@@ -108,8 +111,8 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
       header: ({ column }) => (
         <DataTableColumnHeader column={column} label="Priority" />
       ),
-      cell: ({ cell }) => {
-        const priorityMeta = getPriorityMeta(cell.getValue<string>());
+      cell: ({ row }) => {
+        const priorityMeta = getPriorityMeta(row.original.priorityKey);
 
         if (!priorityMeta) return null;
 
@@ -119,7 +122,7 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
           <div className="grid min-w-0 grid-cols-[auto_1fr] items-center gap-2">
             <Badge variant="outline" className="py-1 [&>svg]:size-3.5">
               <PriorityIcon className={priorityMeta.className} />
-              <span>{cell.getValue<string>()}</span>
+              <span>{row.original.priorityName}</span>
             </Badge>
           </div>
         );
@@ -180,7 +183,7 @@ export function getTasksTableColumns({}: GetTasksTableColumnsProps): ColumnDef<G
     },
     {
       id: "actions",
-      cell: function Cell({}) {
+      cell: function Cell() {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

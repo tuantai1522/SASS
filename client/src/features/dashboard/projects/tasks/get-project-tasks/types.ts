@@ -12,9 +12,21 @@ export type GetProjectTasksResponse = {
 
   statusId: string;
   statusName: string;
+  statusKey: string;
+  statusColorToken: string;
+  statusIconKey: string;
 
   priorityId: string;
   priorityName: string;
+  priorityKey: string;
+  priorityColorToken: string;
+  priorityIconKey: string;
+
+  typeId: string;
+  typeName: string;
+  typeKey: string;
+  typeColorToken: string;
+  typeIconKey: string;
 
   assigneeId?: string;
   assigneeName?: string;
