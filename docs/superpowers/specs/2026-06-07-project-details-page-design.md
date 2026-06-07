@@ -67,12 +67,24 @@ The tab strip should contain two items:
 This tab is the project overview tab and will show:
 
 - Full description or an empty-state fallback
-- Secondary metadata and compact stats for:
-  - progress
-  - total tasks
-  - completed tasks
-  - current user role
-  - created date
+- A custom summary card layout for key project fields instead of a plain text list
+
+Recommended card content:
+
+- `Progress`
+- `Total tasks`
+- `Completed tasks`
+- `Current role`
+- `Created date`
+
+These cards should be custom page-level UI built for this feature, and they can compose the shared `Card` primitive where useful. The goal is to make the details tab feel like a small project overview dashboard rather than a metadata dump.
+
+The first version should favor clarity over density:
+
+- One card per summary field or tightly-related pair
+- Simple labels with large values
+- Consistent spacing and easy scanability
+- No unnecessary visual noise
 
 The layout should intentionally leave room for future expansion, especially a files section the user plans to add later.
 
@@ -131,6 +143,8 @@ Update the project route so it:
 4. Uses `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` to render the two-tab layout
 5. Mounts `TasksTable` inside the `Project tasks` tab
 
+Inside the `Project details` tab, add a small custom card section for summary values. This should live with the project page feature code rather than as a new generic shared abstraction unless reuse becomes obvious.
+
 ## Error Handling
 
 - Reuse existing query loading states for a clean initial render.
@@ -147,3 +161,4 @@ No testing work is included in this scope by explicit user direction.
 - Prefer adapting the UI to the existing backend response over expanding backend scope unless a small naming cleanup materially improves maintainability.
 - Keep the tab and header UI straightforward so future additions such as files can slot into the details tab without restructuring the page.
 - Prefer the default tab experience to be obvious and low-friction, with `Project details` as the overview tab and `Project tasks` as the work tab.
+- Prefer custom feature components for the project summary cards instead of prematurely generalizing them into shared UI.
