@@ -21,16 +21,23 @@ export * from "./components/ui/Dialog";
 export * from "./components/ui/Collapsible";
 export * from "./components/ui/ScrollArea";
 export * from "./components/ui/Toggle";
+export * from "./components/ui/Table";
+export * from "./components/ui/Checkbox";
 export * from "./components/rich-text-editor/RichTextEditor";
 export * from "./components/rich-text-editor/extensions";
 export * from "./components/rich-text-editor/SafeContent";
+
+export * from "./components/table/DataTable";
+export * from "./components/table/DataTableColumnHeader";
 
 export * from "./providers/auth-provider";
 export * from "./providers/app-router-provider";
 export * from "./providers/theme-provider";
 export * from "./providers/realtime-provider";
+export * from "./providers/nuqs-provider";
 
 export * from "./types/Pagination";
 export * from "./types/IdResponse";
 
-export * from "./hooks/useInfiniteSidebarScroll.ts";
+export * from "./hooks/useInfiniteSidebarScroll";
+export * from "./hooks/useDataTable";
