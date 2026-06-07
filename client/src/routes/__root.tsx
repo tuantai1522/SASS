@@ -12,17 +12,17 @@ function RootComponent() {
   return (
     <>
       <Outlet />
-      <TanStackDevtools
-        config={{
-          position: "bottom-right",
-        }}
-        plugins={[
-          {
-            name: "TanStack Router",
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-        ]}
-      />
+      {/*<TanStackDevtools*/}
+      {/*  config={{*/}
+      {/*    position: "top-left",*/}
+      {/*  }}*/}
+      {/*  plugins={[*/}
+      {/*    {*/}
+      {/*      name: "TanStack Router",*/}
+      {/*      render: <TanStackRouterDevtoolsPanel />,*/}
+      {/*    },*/}
+      {/*  ]}*/}
+      {/*/>*/}
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { TasksTable } from "@/features/dashboard/projects/tasks/get-project-tasks";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_dashboard/projects/$projectId/")({
@@ -5,5 +6,12 @@ export const Route = createFileRoute("/_dashboard/projects/$projectId/")({
 });
 
 function ProjectPage() {
-  return <p>Project feature page placeholder for `/project/$id`.</p>;
+  const { projectId } = Route.useParams();
+
+  return (
+    <div className="flex h-full min-h-0 w-full flex-1 flex-col p-4">
+      {/*Task table*/}
+      <TasksTable projectId={projectId} key={projectId} />
+    </div>
+  );
 }
