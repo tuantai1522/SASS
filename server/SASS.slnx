@@ -7,5 +7,6 @@
   </Folder>
   <Folder Name="/src/Services/">
     <Project Path="src\Services\SASS.Chat\SASS.Chat.csproj" Type="Classic C#" />
+    <Project Path="src\Services\SASS.Gateway\SASS.Gateway.csproj" Type="Classic C#" />
   </Folder>
 </Solution>
